@@ -3,9 +3,11 @@
    artwork is hard-coded here beyond the known collection size (3,333)
    and the five rarities. If the collection files are not there yet,
    the site shows honest "not yet published" states.
-   The contract IS deployed (0x607840e0a3675cf2181c98453484eb785ddd2d83)
-   and mint is OPEN since 30 Oct 2026 ~21:25 WIB. Minted counts are read
-   live from the chain (refreshLiveMint); static numbers are fallbacks only. */
+   The v2 contract IS deployed (0x2aE2969ae37CB39abc45375598cEE530C181838A)
+   and mint is NOT active yet — it opens when the owner activates it.
+   Minted counts are read live from the chain (refreshLiveMint);
+   static numbers are fallbacks only. v1 (0x607840e0a3675cf2181c98453484eb785ddd2d83)
+   had 19 mints and stays live on-chain. */
 
 (function () {
   "use strict";
@@ -302,7 +304,16 @@
   }
 
   /* ---------- mint page: agent prompt ---------- */
-  function initMint() {
+  // The prompt's mint-state line is built from the live chain state:
+  // buildPrompt() runs once at load (state unknown → "checking" line) and
+  // again from refreshLiveMint() once mintActive() has been read, so the
+  // prompt never claims OPEN while the contract says closed.
+  function promptStateText() {
+    if (liveActive === null) return "Mint status is read live from the contract — check the status banner on this page before minting.";
+    if (liveActive) return "Mint is OPEN.";
+    return "Mint is NOT active yet — do not mint until the owner activates it.";
+  }
+  function buildPrompt() {
     const pre = $("#agent-prompt");
     if (!pre) return;
     const addr = CFG.CONTRACT_ADDRESS;
@@ -311,10 +322,13 @@
       : "The OOBIX contract is not deployed yet. Do not mint anything until the owner gives you the deployed contract address — if there is no deployed contract address, stop and say so.";
     pre.textContent =
       "Mint one OOBIX on BNB Smart Chain (chain id 56).\n" +
-      addrLine + " Mint is OPEN.\n" +
+      addrLine + " " + promptStateText() + "\n" +
       "First check that my wallet holds a SPACE ID .ai Agent ID: call hasAgentId(my wallet address) on the OOBIX contract — it must return true, otherwise the mint will revert. The Agent ID registry is 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F. There is no per-wallet mint limit.\n" +
-      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Live pricing: tokens #1-500 cost 0.0003 BNB each, tokens #501-3333 are FREE (0 BNB — you still pay gas). One token per mint() call. The payment goes directly to the revenue wallet in the same call; it never sits in the contract.\n" +
+      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Live pricing: tokens #1-500 cost 0.0003 BNB each, tokens #501-3333 cost 0.0008 BNB each. One token per mint() call. The payment goes directly to the revenue wallet in the same call; it never sits in the contract.\n" +
       "Show me the exact amount before I sign, and confirm the transaction on-chain once it is done: https://bscscan.com/address/" + addr;
+  }
+  function initMint() {
+    buildPrompt();
     const btn = $("#copy-prompt");
     if (btn) {
       btn.addEventListener("click", () => {
@@ -369,6 +383,7 @@
     liveTotal = parseInt(totalHex, 16);
     const activeHex = await rpcCall("0x25fd90f3"); // mintActive()
     liveActive = activeHex != null ? parseInt(activeHex, 16) === 1 : true;
+    buildPrompt(); // refresh the prompt's mint-state line with the live state
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     set("mint-total", String(liveTotal));
     set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));

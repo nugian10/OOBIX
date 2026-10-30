@@ -1,8 +1,10 @@
 // OOBIX — site configuration.
-// The contract IS deployed: OobixNFT at 0x607840e0a3675cf2181c98453484eb785ddd2d83
-// on BNB Smart Chain Mainnet (56), deployed 30 Oct 2026 21:05 WIB by My Wallet
-// (deploy tx 0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7).
-// Mint IS active since 30 Oct 2026 21:25 WIB (mintActive true).
+// The v2 contract IS deployed: OobixNFT at 0x2aE2969ae37CB39abc45375598cEE530C181838A
+// on BNB Smart Chain Mainnet (56), deployed 30 Oct 2026 ~22:27 WIB by My Wallet
+// (deploy tx 0xe26f701815d0d646747ae86c36ad515f305e604c3e9e5459d1da38fac99d8bac,
+// block 130688929). Mint is NOT active yet (mintActive false) — it opens
+// when the owner activates it. v1 contract 0x607840e0a3675cf2181c98453484eb785ddd2d83
+// (19 minted, tier 2 FREE) is superseded and stays live on-chain.
 // Never fill in a guessed address.
 //
 // NOTE: this MUST be window.OOBIX_CONFIG (not a bare const) — app.js reads
@@ -17,7 +19,7 @@
 // (including Vercel with the site folder as root — relative ../collection
 // paths would 404 there, so the site must NOT use them).
 window.OOBIX_CONFIG = {
-  CONTRACT_ADDRESS: "0x607840e0a3675cf2181c98453484eb785ddd2d83",
+  CONTRACT_ADDRESS: "0x2aE2969ae37CB39abc45375598cEE530C181838A",
   CHAIN_ID: 56,
   CHAIN_NAME: "BNB Smart Chain Mainnet",
   TOTAL_SUPPLY: 3333,
@@ -32,9 +34,9 @@ window.OOBIX_CONFIG = {
   RARITIES: ["Common", "Uncommon", "Rare", "Epic", "Legendary"],
   RARITY_COUNTS: { Common: 2000, Uncommon: 800, Rare: 333, Epic: 150, Legendary: 50 },
   SPECIES: ["Round Blob", "Tall Thin", "Long Neck", "Spiky", "Quadruped", "Floating Jelly", "Wide Flat", "One-Eye Orb"],
-  // Planned mint pricing (from the contract, not yet live):
-  // tokens #1-500: 0.0003 BNB each; #501-3333: FREE (0 BNB).
+  // Mint pricing (from the v2 contract):
+  // tokens #1-500: 0.0003 BNB each; #501-3333: 0.0008 BNB each.
   PRICE_TIER_1: "0.0003 BNB",
-  PRICE_TIER_2: "FREE",
+  PRICE_TIER_2: "0.0008 BNB",
   TIER_1_END: 500,
 };
