@@ -16,7 +16,7 @@
 // in .env.example; BASE_URI is live (GitHub raw, verified 200).
 // Minting: mint() takes no arguments, mints 1, requires the
 // minter to hold a SPACE ID .ai Agent ID, value must equal
-// currentPrice() exactly (0 in the free phase, #501+).
+// currentPrice() exactly (0.0008 BNB in tier 2, #501+).
 // Mint stays OFF after deploy (mintActive false) — the owner
 // turns it on with setMintActive(true) only at launch.
 // See contracts/OobixNFT.sol header.
@@ -56,7 +56,7 @@ async function main() {
     console.log("!!! MAINNET — BNB SUNGGUHAN, deploy tidak bisa dibatalkan. Periksa alamat di atas sekali lagi.");
   }
 
-  const Factory = await ethers.getContractFactory("OobixNFT");
+  const Factory = await ethers.getContractFactory("contracts/OobixNFT.sol:OobixNFT");
   const contract = await Factory.deploy(owner, revenue, agentIdRegistry, baseURI, ethers.getBytes(deck.deckHex));
   const receipt = await contract.deploymentTransaction().wait();
   await contract.waitForDeployment();
@@ -93,7 +93,7 @@ async function main() {
         maxSupply: 3333,
         tier1End: 500,
         priceTier1: "0.0003",
-        priceTier2: "0",
+        priceTier2: "0.0008",
         mintActive: false,
         agentIdCheckRequired: true,
         model: "wedo-gacha",

@@ -11,8 +11,8 @@ Dokumen ini adalah instruksi untuk agen yang akan melakukan mint OOBIX. Modelnya
 | Standar | ERC-721 |
 | Chain | BNB Smart Chain, Chain ID 56 |
 | Total supply | 3.333 |
-| Kontrak | `0x607840e0a3675cf2181c98453484eb785ddd2d83` — di-deploy 30 Okt 2026 21:05 WIB (blok 130678042) |
-| Harga | #1–500: 0,0003 BNB per NFT; #501–3.333: 0 BNB (GRATIS) |
+| Kontrak | v2 (redeploy, BELUM di-deploy — halaman deploy sudah siap): tier 2 = 0,0008 BNB. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` — di-deploy 30 Okt 2026 21:05 WIB (blok 130678042), 16 mint, tier 2 GRATIS; harganya TERKUNCI dan digantikan v2 setelah deploy. |
+| Harga | #1–500: 0,0003 BNB per NFT; #501–3.333: 0,0008 BNB per NFT (v2; v1 GRATIS tapi harganya terkunci dan sudah digantikan) |
 | Mint | `mint()`, tanpa argumen, 1 token per panggilan, selector `0x1249c58b` |
 | Gate | Harus memegang SPACE ID .ai Agent ID NFT `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |
 | Deck | Common 2000 / Uncommon 800 / Rare 333 / Epic 150 / Legendary 50; deckHash `0xb44bbbfc75bc6bfda8673ea71b6eef7a3389c78d0e30de7b7937c930acddc1a5` |
@@ -47,8 +47,8 @@ Tunjukkan ke pemilik sebelum eksekusi: alamat kontrak, token ID yang akan di-min
 
 ### 3. Eksekusi
 
-- Kirim **persis** `currentPrice()` — tidak kurang, tidak lebih. Di fase gratis (#501 ke atas) kirim **persis 0 BNB**.
-- Satu panggilan `mint()` = satu NFT. Untuk mint lagi, ulangi dari langkah preview (harga bisa berubah di batas tier — tapi di OOBIX, setelah #500 harga tetap 0).
+- Kirim **persis** `currentPrice()` — tidak kurang, tidak lebih. Di tier 2 (#501 ke atas) kirim **persis 0,0008 BNB**.
+- Satu panggilan `mint()` = satu NFT. Untuk mint lagi, ulangi dari langkah preview (harga berubah di batas tier — setelah #500 harga 0,0008 BNB).
 - Setelah transaksi: baca event `Minted(minter, tokenId, price, rarity, seed)` dan cek `ownerOf(tokenId)` = wallet pemint.
 
 ## Aturan
@@ -63,6 +63,6 @@ Tunjukkan ke pemilik sebelum eksekusi: alamat kontrak, token ID yang akan di-min
 ## Perbedaan dengan WEDO (jangan tertukar)
 
 - WEDO: 6.666 supply, free + komisi, batas 10 per wallet, tier Common/Rare/Epic/Legendary/Mythic.
-- OOBIX: 3.333 supply, #1–500 berbayar lalu GRATIS, **tanpa batas per wallet**, tier Common/Uncommon/Rare/Epic/Legendary.
+- OOBIX: 3.333 supply, dua tier berbayar (#1–500: 0,0003 BNB; #501–3.333: 0,0008 BNB), **tanpa batas per wallet**, tier Common/Uncommon/Rare/Epic/Legendary.
 - WEDO memakai `totalMinted()`, bukan `totalSupply()` (terverifikasi on-chain: `totalSupply()` revert di WEDO). OOBIX menyediakan keduanya.
 - Source WEDO TIDAK terverifikasi di BscScan — mekanisme ini dimodelkan dari skill file publik, bukan disalin dari source.

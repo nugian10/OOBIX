@@ -1,15 +1,20 @@
-# OOBIX — Prompt deploy untuk Agen Binance (Agentic Wallet)
+# OOBIX v2 — Prompt deploy untuk Agen Binance (Agentic Wallet)
 
-> ⚠️ SUDAH DEPLOYED — JANGAN DEPLOY LAGI. Dokumen ini hanya arsip.
-> Kontrak sudah live sejak 30 Okt 2026 21:05 WIB:
+> ⚠️ INI DEPLOY v2 (REDEPLOY) — BUKAN deploy pertama.
+> Kontrak v1 sudah live sejak 30 Okt 2026 21:05 WIB:
 > alamat `0x607840e0a3675cf2181c98453484eb785ddd2d83`,
 > tx deploy `0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7`,
-> BscScan source-verified, mint sudah AKTIF sejak 21:25 WIB.
-> Kalau ada agen yang membaca prompt ini, suruh dia BERHENTI — jangan deploy kontrak baru.
+> BscScan source-verified, mint AKTIF sejak 21:25 WIB, 16 token sudah di-mint.
+> v1 TIDAK BISA diubah harganya (`setTierPrices` revert `PricesLocked` setelah
+> mint pertama) — karena itu pemilik menyetujui redeploy sebagai v2.
+> Satu-satunya beda v2: harga #501–3.333 menjadi **0,0008 BNB** (v1 GRATIS).
+> Deck, alamat, dan semua aturan lain SAMA seperti v1.
+> Deploy v2 **SEKALI SAJA** ke Mainnet. v1 tetap live dengan 16 token-nya;
+> jangan deploy v1 lagi, jangan deploy v2 dua kali.
 
-## Tugas (sudah selesai — arsip saja)
+## Tugas
 
-Deploy kontrak OobixNFT ke **BNB Smart Chain MAINNET (chainId 56) saja**.
+Deploy kontrak OobixNFT **v2** ke **BNB Smart Chain MAINNET (chainId 56) saja**.
 Jangan testnet. Jangan deploy dua kali.
 
 ## Sumber kode
@@ -33,7 +38,7 @@ Sebelum deploy, jalankan `npx hardhat test` — semua 18 test harus lolos.
 
 ## Gas
 
-Deploy di **0,05 gwei**. Biaya deploy terukur: 5.419.052 gas = **~0,0002710 BNB**
+Deploy di **0,05 gwei**. Biaya deploy v2 terukur: 5.440.531 gas = **~0,0002720 BNB**
 (~Rp 3.500). Wallet deployer (Agentic Wallet) harus punya minimal ~0,001 BNB.
 Jangan deploy di atas 1 gwei tanpa konfirmasi pemilik.
 
@@ -64,5 +69,6 @@ bukan mengubah kontrak. Jangan ubah alamat, deck, atau harga apa pun untuk
 
 - Jangan minta seed phrase, private key, atau pairing code ke siapa pun.
 - Jangan deploy ke testnet, jangan deploy dua kali, jangan ubah harga
-  (#1–500: 0,0003 BNB, #501–3.333: GRATIS) atau deck.
+  (#1–500: 0,0003 BNB, #501–3.333: 0,0008 BNB) atau deck.
+- Jangan deploy ulang v1 — v1 sudah live dan harganya terkunci.
 - Kontrak ini source-nya BELUM diaudit independen — jangan klaim sudah diaudit.

@@ -1,6 +1,8 @@
 # OOBIX — Smart Contract
 
-Kontrak: `contracts/OobixNFT.sol` — `OOBIX` / `OOBX`, ERC-721, Solidity 0.8.24, OpenZeppelin 5.4.0, optimizer runs 200, EVM Cancun. Compile bersih (0 error, 0 warning). Creation bytecode 10.880 byte, runtime bytecode 9.130 byte. ABI 97 entri di `abi/OobixNFT.abi.json`.
+Kontrak: `contracts/OobixNFT.sol` — `OOBIX` / `OOBX`, ERC-721, Solidity 0.8.24, OpenZeppelin 5.4.0, optimizer runs 200, EVM Cancun. Compile bersih (0 error, 0 warning). Creation bytecode 10.894 byte, runtime bytecode 9.137 byte. ABI 97 entri di `abi/OobixNFT.abi.json`.
+
+> **v2 (30 Okt 2026, 22:16 WIB):** redeploy disetujui pemilik — tier 2 berubah dari GRATIS (0 BNB) menjadi **0,0008 BNB**. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` (16 mint, tier 2 GRATIS) tidak bisa diubah harganya — `setTierPrices` revert `PricesLocked` setelah mint pertama — jadi digantikan v2 setelah deploy. Deck, alamat, dan semua aturan lain SAMA seperti v1. v2 BELUM di-deploy; halaman deploy `site/deploy.html` sudah dibuat ulang dengan bytecode v2.
 
 ## Model WEDO — yang diambil dari wedo.wtf
 
@@ -24,12 +26,12 @@ WEDO (`0x745d7a3b46E704e7A9D79AE1C3B049Da8f335D79`, 6.666 gacha Doer NFT, BNB Ch
 - Nama/symbol, supply 3.333, tier, registry, harga, deckHash — semua sesuai.
 - Selector terkonfirmasi: `mint()` `0x1249c58b`, `currentPrice()` `0x9d1b464a`, `rarityOf(uint256)` `0xdd3b5f9a`, `deckHash()` `0x8830dea2`, `mintOpen()` `0x24bbd049`, `totalMinted()` `0xa2309ff8`, `holdsAgentId(address)` `0x11213086`.
 - Deck: jumlah tier persis di seluruh 3.333 slot; `rarityOf` cocok dengan deck generator untuk semua ID sampel; deck salah (panjang salah / jumlah tier salah) ditolak constructor dengan `InvalidDeck`.
-- Harga: #1–500 = 0,0003 BNB, #501–3.333 = 0 BNB (GRATIS). Batas terbukti: setelah 500 mint, `currentPrice()` = 0 dan #501 mint dengan value 0 persis; kirim 1 wei di fase gratis pun ditolak (`IncorrectPayment`). Kurang/lebih bayar di fase berbayar juga ditolak.
+- Harga (v2): #1–500 = 0,0003 BNB, #501–3.333 = 0,0008 BNB. Batas terbukti: setelah 500 mint, `currentPrice()` = 0,0008 BNB; #501 mint dengan value 0 ditolak (`IncorrectPayment`), dengan 0,0008 persis berhasil dan diteruskan ke revenue wallet. Kurang/lebih bayar juga ditolak.
 - Tanpa Agent ID → `NoAgentId`; panggil dari kontrak → `NoContracts`; mint belum aktif → `MintInactive`.
 - Tanpa batas mint per wallet: wallet yang sama mint berulang kali; `mintedBy` hanya counter transparansi.
 - Cek Agent ID bisa dimatikan owner (escape hatch) lalu dinyalakan lagi; saat mati, siapa pun bisa mint; saat nyala lagi, yang tanpa Agent ID diblokir lagi.
 - Registry asli SPACE ID di chain lokal: `holdsAgentId` false, mint revert `NoAgentId` (perilaku yang diharapkan — registry asli tidak ada code-nya di chain lokal).
-- Harga tier: tier 2 boleh 0, tier 1 harus > 0; harga bisa diubah owner HANYA sebelum mint pertama; batas 500 adalah konstanta.
+- Harga tier: tier 2 boleh 0, tier 1 harus > 0; harga bisa diubah owner HANYA sebelum mint pertama — `setTierPrices` revert `PricesLocked` setelah mint pertama. Inilah yang membuat v1 tidak bisa diubah harganya (16 mint sudah terjadi) dan harus di-redeploy sebagai v2. Batas 500 adalah konstanta.
 - **Pembayaran langsung ke Agentic Wallet (diputuskan Nugraha 20:33 WIB 30 Okt):** setiap mint berbayar meneruskan `msg.value` LANGSUNG ke `revenueWallet` di dalam panggilan `mint()` yang sama — tidak masuk kontrak dulu, tidak perlu `withdraw()`. Saldo kontrak tetap 0 setelah mint; `withdraw()` hanya safety valve untuk dana yang masuk di luar `mint()`, dan dalam operasi normal revert `NoFunds`. Kalau pengiriman gagal, seluruh mint revert (`PaymentForwardFailed`) — tidak ada token yang ter-mint tanpa pembayaran sampai. Cara yang sama sudah terbukti di Mythora: 6 mint masuk langsung ke Agentic Wallet yang sama, saldo kontrak 0.
 - `withdraw()` hanya owner; dalam operasi normal saldo 0 jadi revert `NoFunds`; non-owner ditolak.
 - Supply cap TERBUKTI PENUH (bukan shortcut): seluruh 3.333 token di-mint dalam test, lalu `currentPrice()` dan `mint()` revert `SoldOut`, `totalSupply()` = 3.333, `nextTokenId()` = 3.334.
@@ -46,16 +48,16 @@ WEDO (`0x745d7a3b46E704e7A9D79AE1C3B049Da8f335D79`, 6.666 gacha Doer NFT, BNB Ch
 
 ## Biaya deploy (diukur Hardhat, deck asli 3.333 byte)
 
-- **Gas deploy: 5.419.052 gas.** Deck-lah yang mendominasi: menyimpan 3.333 byte + validasi jumlah tier di constructor. Ini PRAKTIS di BSC (limit gas blok ~140 juta), tapi HARGA GAS menentukan biaya:
-  - 0,05 gwei (minimum jaringan, dipakai deploy Mythora/MythRealm/MINTFORM): **0,0002710 BNB (~Rp 3.500** pada Rp 12,75 jt/BNB).
-  - 1 gwei: 0,00542 BNB (~Rp 69.000).
+- **Gas deploy (v2): 5.440.531 gas.** Deck-lah yang mendominasi: menyimpan 3.333 byte + validasi jumlah tier di constructor. Ini PRAKTIS di BSC (limit gas blok ~140 juta), tapi HARGA GAS menentukan biaya:
+  - 0,05 gwei (minimum jaringan, dipakai deploy Mythora/MythRealm/MINTFORM): **0,0002720 BNB (~Rp 3.500** pada Rp 12,75 jt/BNB).
+  - 1 gwei: 0,00544 BNB (~Rp 69.000).
   - 3 gwei: 0,0163 BNB (~Rp 207.000).
 - **Deploy-lah di 0,05 gwei seperti proyek sebelumnya.** Kalau gas naik, biaya naik sebanding — tidak ada fallback yang diimplementasikan, karena deck penuh terbukti bisa di-deploy dengan angka di atas. (Fallback yang dipertimbangkan dan TIDAK dipakai: hanya simpan deckHash + undian sisa-jumlah — itu akan menghilangkan verifikasi deck on-chain.)
 
 ## Tiga deviasi kunci dari WEDO
 
 1. **Supply 3.333, bukan 6.666.**
-2. **Harga: #1–500 = 0,0003 BNB, #501–3.333 = 0 BNB (GRATIS).** WEDO: free mint + komisi anti-bot kecil. OOBIX tidak punya komisi — fase gratis benar-benar 0.
+2. **Harga (v2): #1–500 = 0,0003 BNB, #501–3.333 = 0,0008 BNB.** WEDO: free mint + komisi anti-bot kecil. OOBIX v1 punya fase gratis (tier 2 = 0 BNB), tapi v2 menghapusnya — kedua tier berbayar. v1 tidak bisa diubah harganya (terkunci setelah mint pertama), jadi v2 adalah redeploy dengan deck dan aturan yang sama.
 3. **TIDAK ADA batas mint per wallet.** WEDO membatasi 10 mint berbayar per wallet (`paidMintedBy`). OOBIX menghapusnya atas preferensi Nugraha yang sudah berdiri ("Jangan kasih batasan untuk mint perwallet", Mythora + XOVRATH). Satu wallet ber-Agent ID BISA memborong sebagian besar supply — itu trade-off yang diterima.
 
 Deviasi lain: 5 tier rarity OOBIX (Common/Uncommon/Rare/Epic/Legendary) vs 5 tier WEDO (Common/Rare/Epic/Legendary/Mythic); deck OOBIX disimpan penuh on-chain; `totalSupply()` disediakan OOBIX (WEDO tidak punya).

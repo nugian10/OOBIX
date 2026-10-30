@@ -7,7 +7,7 @@ async function main() {
   const Mock = await ethers.getContractFactory("MockAgentIdNFT");
   const mock = await Mock.deploy();
   await mock.waitForDeployment();
-  const Factory = await ethers.getContractFactory("OobixNFT");
+  const Factory = await ethers.getContractFactory("contracts/OobixNFT.sol:OobixNFT");
   const contract = await Factory.deploy(owner.address, revenue.address, await mock.getAddress(), "ipfs://test/", ethers.getBytes(deck.deckHex));
   const tx = contract.deploymentTransaction();
   const receipt = await tx.wait();
