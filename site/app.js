@@ -3,8 +3,9 @@
    artwork is hard-coded here beyond the known collection size (3,333)
    and the five rarities. If the collection files are not there yet,
    the site shows honest "not yet published" states.
-   The contract is NOT deployed: minted on-chain is always 0 here,
-   and the mint page shows PLANNED pricing, never live chain data. */
+   The contract IS deployed (0x607840e0a3675cf2181c98453484eb785ddd2d83)
+   and mint is OPEN since 30 Oct 2026 ~21:25 WIB. Minted counts are read
+   live from the chain (refreshLiveMint); static numbers are fallbacks only. */
 
 (function () {
   "use strict";
@@ -112,8 +113,8 @@
       note.textContent = known === 0
         ? "Collection artwork has not been published yet. Counts update here automatically once the collection files land."
         : known < CFG.TOTAL_SUPPLY
-          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Minted on-chain is 0 — contract deployed, mint not active yet."
-          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Minted on-chain is 0 — contract deployed, mint not active yet.";
+          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Mint is OPEN — loading live minted count from the chain…"
+          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Mint is OPEN — loading live minted count from the chain…";
     }
   }
 
@@ -282,8 +283,9 @@
       });
     }
     if (meta && meta.name) rows.push(["Name", meta.name]);
-    rows.push(["Status", "Not minted — contract deployed, mint not active yet"]);
-    rows.push(["Total minted on-chain", "0 — contract deployed, mint not active yet"]);
+    const minted = liveTotal != null && id <= liveTotal;
+    rows.push(["Status", minted ? "Minted on-chain" : "Not minted yet — mint is OPEN"]);
+    rows.push(["Total minted on-chain", liveTotal == null ? "Mint is OPEN — live count loads on the Mint page" : String(liveTotal) + " (live, on-chain)"]);
     const body = $("#detail-attrs");
     if (body) {
       body.innerHTML = rows.map((r) =>
@@ -336,11 +338,52 @@
     done();
   }
 
+  /* ---------- live on-chain mint state ---------- */
+  // Reads totalSupply() + mintActive() straight from the chain with a plain
+  // JSON-RPC call (no wallet, no library). Falls back silently to the static
+  // numbers in the HTML when the RPC is unreachable.
+  const RPC_URLS = ["https://bsc-dataseed.binance.org/", "https://bsc.publicnode.com"];
+  let liveTotal = null;
+  let liveActive = null;
+  async function rpcCall(data) {
+    for (const url of RPC_URLS) {
+      try {
+        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: CFG.CONTRACT_ADDRESS, data: data }, "latest"] }) });
+        const json = await res.json();
+        if (json && json.result) return json.result;
+      } catch (e) { /* try next RPC */ }
+    }
+    return null;
+  }
+  async function refreshLiveMint() {
+    if (!CFG.CONTRACT_ADDRESS) return;
+    const totalHex = await rpcCall("0x18160ddd"); // totalSupply()
+    if (totalHex == null) return;
+    liveTotal = parseInt(totalHex, 16);
+    const activeHex = await rpcCall("0x25fd90f3"); // mintActive()
+    liveActive = activeHex != null ? parseInt(activeHex, 16) === 1 : true;
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+    set("mint-total", String(liveTotal));
+    set("mint-phase", liveActive ? "OPEN — tokens #1–500 cost 0.0003 BNB, #501–3,333 FREE" : "CLOSED — mint not active");
+    set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));
+    const host = $("#stats");
+    if (host) {
+      const el = host.querySelector('[data-stat="supply"]');
+      if (el) el.textContent = String(liveTotal);
+    }
+    const note = $("#stats-note");
+    if (note) note.textContent = liveActive ? "Mint is OPEN. " + liveTotal + " minted on-chain so far." : "Mint is not active. " + liveTotal + " minted on-chain so far.";
+    $$(".js-contract-status").forEach((el) => {
+      el.innerHTML = '<span class="dot"></span><span>' + (liveActive ? "MINT IS OPEN — " + liveTotal + " MINTED SO FAR" : "CONTRACT DEPLOYED — MINT NOT ACTIVE") + " — " + esc(CFG.CONTRACT_ADDRESS) + "</span>";
+    });
+  }
+
   /* ---------- boot ---------- */
   document.addEventListener("DOMContentLoaded", () => {
     initStats();
     initFeatured();
     initCollection();
     initMint();
+    refreshLiveMint();
   });
 })();
