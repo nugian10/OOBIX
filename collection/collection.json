@@ -42,7 +42,10 @@
   "deckHash": "0xb44bbbfc75bc6bfda8673ea71b6eef7a3389c78d0e30de7b7937c930acddc1a5",
   "seed": "OOBIX-DECK-SEED-2026-10-30-v1",
   "contract": {
-    "status": "not deployed",
-    "address": ""
+    "status": "deployed",
+    "address": "0x607840e0a3675cf2181c98453484eb785ddd2d83",
+    "deployed": "2026-10-30T21:05:27+07:00",
+    "deployTx": "0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7",
+    "chainId": 56
   }
 }

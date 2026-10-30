@@ -112,8 +112,8 @@
       note.textContent = known === 0
         ? "Collection artwork has not been published yet. Counts update here automatically once the collection files land."
         : known < CFG.TOTAL_SUPPLY
-          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Minted on-chain is 0 because the contract is not deployed yet."
-          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Minted on-chain is 0 because the contract is not deployed yet.";
+          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Minted on-chain is 0 — contract deployed, mint not active yet."
+          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Minted on-chain is 0 — contract deployed, mint not active yet.";
     }
   }
 
@@ -282,8 +282,8 @@
       });
     }
     if (meta && meta.name) rows.push(["Name", meta.name]);
-    rows.push(["Status", "Not minted — contract not deployed yet"]);
-    rows.push(["Total minted on-chain", "0 — contract not deployed"]);
+    rows.push(["Status", "Not minted — contract deployed, mint not active yet"]);
+    rows.push(["Total minted on-chain", "0 — contract deployed, mint not active yet"]);
     const body = $("#detail-attrs");
     if (body) {
       body.innerHTML = rows.map((r) =>

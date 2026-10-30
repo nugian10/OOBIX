@@ -11,7 +11,7 @@ Dokumen ini adalah instruksi untuk agen yang akan melakukan mint OOBIX. Modelnya
 | Standar | ERC-721 |
 | Chain | BNB Smart Chain, Chain ID 56 |
 | Total supply | 3.333 |
-| Kontrak | BELUM DI-DEPLOY — isi setelah deploy |
+| Kontrak | `0x607840e0a3675cf2181c98453484eb785ddd2d83` — di-deploy 30 Okt 2026 21:05 WIB (blok 130678042) |
 | Harga | #1–500: 0,0003 BNB per NFT; #501–3.333: 0 BNB (GRATIS) |
 | Mint | `mint()`, tanpa argumen, 1 token per panggilan, selector `0x1249c58b` |
 | Gate | Harus memegang SPACE ID .ai Agent ID NFT `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |

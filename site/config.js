@@ -1,17 +1,17 @@
 // OOBIX — site configuration.
-// The contract is NOT deployed. CONTRACT_ADDRESS stays empty until the
-// owner deploys OobixNFT.sol on BNB Smart Chain Mainnet (56) and
-// records the real address here. Never fill in a guessed address.
+// The contract IS deployed: OobixNFT at 0x607840e0a3675cf2181c98453484eb785ddd2d83
+// on BNB Smart Chain Mainnet (56), deployed 30 Oct 2026 21:05 WIB by My Wallet
+// (deploy tx 0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7).
+// Mint is NOT active yet (mintActive false) — the owner turns it on at launch.
+// Never fill in a guessed address.
 //
-// Storage is GitHub (chosen 30 Okt 2026), NOT IPFS. The planned repo is
-// nugian10/OOBIX (branch main) — it does NOT exist yet. Once the repo
-// exists and is PUBLIC, these raw URLs work and the gallery loads from
-// them, wherever the site is hosted (including Vercel with the site
-// folder as root — relative ../collection paths would 404 there, so
-// the site must NOT use them). Until the push, the gallery shows the
-// honest "not yet published" states the app already handles.
+// Storage is GitHub (chosen 30 Okt 2026), NOT IPFS. The repo is
+// nugian10/OOBIX (branch main) — it exists and is PUBLIC, so these raw URLs
+// work and the gallery loads from them, wherever the site is hosted
+// (including Vercel with the site folder as root — relative ../collection
+// paths would 404 there, so the site must NOT use them).
 const OOBIX_CONFIG = {
-  CONTRACT_ADDRESS: "",
+  CONTRACT_ADDRESS: "0x607840e0a3675cf2181c98453484eb785ddd2d83",
   CHAIN_ID: 56,
   CHAIN_NAME: "BNB Smart Chain Mainnet",
   TOTAL_SUPPLY: 3333,
