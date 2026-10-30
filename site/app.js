@@ -371,7 +371,6 @@
     liveActive = activeHex != null ? parseInt(activeHex, 16) === 1 : true;
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     set("mint-total", String(liveTotal));
-    set("mint-phase", liveActive ? "OPEN — tokens #1–500 cost 0.0003 BNB, #501–3,333 FREE" : "CLOSED — mint not active");
     set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));
     const host = $("#stats");
     if (host) {
