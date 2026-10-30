@@ -61,20 +61,21 @@ pragma solidity 0.8.24;
 //   sequential.
 // - Tiered pricing, computed ON-CHAIN per token ID:
 //     Token IDs   1–500 : 0.0003 BNB each
-//     Token IDs 501–3333: 0 BNB — FREE MINT
+//     Token IDs 501–3333: 0.0008 BNB each
 //   (WEDO: free mint + a small anti-bot commission.
-//   OOBIX: the first 500 are paid, everything after
-//   is free.) currentPrice() is the price of the next
-//   ID, so the 500 boundary is crossed automatically.
-//   Payment must equal currentPrice() exactly —
-//   including exactly 0 in the free phase. Under- and
-//   overpayment are both rejected.
+//   OOBIX v2: both tiers are paid — the v1 free phase
+//   for #501+ is gone. v1 (0x6078...2d83) had tier 2
+//   FREE, but its prices locked at the first mint.)
+//   currentPrice() is the price of the next ID, so
+//   the 500 boundary is crossed automatically.
+//   Payment must equal currentPrice() exactly.
+//   Under- and overpayment are both rejected.
 // - Tier prices changeable by the owner ONLY before
 //   the first mint (setTierPrices reverts once
 //   totalSupply > 0). The 500 boundary is a constant
 //   and can never move. Tier 1 must stay > 0; tier 2
-//   MAY be 0 (the free phase) — unlike XOVRATH, which
-//   required both tiers > 0.
+//   MAY be 0 (a free phase is allowed before the first
+//   mint, but v2 ships with 0.0008 BNB).
 // - Rarity tiers (5, different from WEDO's 5):
 //     0 Common, 1 Uncommon, 2 Rare, 3 Epic, 4 Legendary
 //   (WEDO: 0 Common, 1 Rare, 2 Epic, 3 Legendary,
@@ -190,7 +191,7 @@ contract OobixNFT is ERC721, Ownable, ReentrancyGuard {
     uint256 public constant COUNT_LEGENDARY = 50;
 
     uint256 public constant DEFAULT_PRICE_TIER_1 = 0.0003 ether;
-    uint256 public constant DEFAULT_PRICE_TIER_2 = 0 ether;
+    uint256 public constant DEFAULT_PRICE_TIER_2 = 0.0008 ether;
 
     /// @notice SPACE ID .ai Agent ID NFT on BNB Smart Chain.
     /// Public registry used by WEDO / Nomio / AnthroBit / Spoxy.
@@ -309,8 +310,7 @@ contract OobixNFT is ERC721, Ownable, ReentrancyGuard {
     }
 
     /// @notice Price of the next NFT to be minted. Reverts when sold out.
-    /// The agent reads this and sends exactly this value with mint()
-    /// — including exactly 0 in the free phase.
+    /// The agent reads this and sends exactly this value with mint().
     function currentPrice() public view returns (uint256) {
         if (_nextTokenId > MAX_SUPPLY) revert SoldOut();
         return priceForTokenId(_nextTokenId);
@@ -366,8 +366,8 @@ contract OobixNFT is ERC721, Ownable, ReentrancyGuard {
     /// and opens deck slot #tokenId. Requires, in order:
     /// mint active; caller is not a contract; caller holds
     /// an Agent ID (unless the check is disabled); supply
-    /// remains; msg.value equals currentPrice() exactly
-    /// (0 in the free phase). No per-wallet limit: the same
+    /// remains; msg.value equals currentPrice() exactly.
+    /// No per-wallet limit: the same
     /// wallet may call mint() again for another token.
     /// Stores the mint seed and the deck rarity.
     /// PAYMENT FLOW: a paid mint forwards msg.value
@@ -375,7 +375,7 @@ contract OobixNFT is ERC721, Ownable, ReentrancyGuard {
     /// it never sits in this contract (Nugraha, 20:33 WIB
     /// 30 Okt 2026). If the forward fails, the whole mint
     /// reverts, so no token is ever minted without payment
-    /// landing. Free mints forward nothing (price is 0).
+    /// landing. A mint with price 0 forwards nothing.
     function mint() external payable nonReentrant {
         if (!mintActive) revert MintInactive();
         if (msg.sender.code.length > 0) revert NoContracts();
@@ -455,7 +455,8 @@ contract OobixNFT is ERC721, Ownable, ReentrancyGuard {
 
     /// @notice Change tier prices — ONLY before the first mint.
     /// The 500 boundary itself is a constant and cannot move.
-    /// Tier 1 must stay > 0; tier 2 MAY be 0 (the free phase).
+    /// Tier 1 must stay > 0; tier 2 MAY be 0 (a free phase is
+    /// allowed, but v2 ships with 0.0008 BNB).
     function setTierPrices(uint256 priceTier1_, uint256 priceTier2_) external onlyOwner {
         if (totalSupply() > 0) revert PricesLocked();
         if (priceTier1_ == 0) revert InvalidPrice();
