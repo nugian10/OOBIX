@@ -36,7 +36,7 @@ Gas deploy terukur (deck asli): **5.419.052 gas** — 0,0002710 BNB pada 0,05 gw
 
 ## Yang masih butuh pemilik
 
-1. Konfirmasi owner + revenue wallet (proposal: owner My Wallet, revenue Agentic Wallet — sama seperti Mythora/MythRealm/MINTFORM; alternatif all-Agentic seperti XOVRATH, dengan konsekuensi lock-out).
+1. ~~Konfirmasi owner + revenue~~ — SUDAH DIKONFIRMASI 20:30 WIB 30 Okt: owner My Wallet `0x0262e8e5E4584D8AB840fD950a6E2E0A414d4097`, revenue Binance Agentic Wallet `0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7`. Pembayaran mint langsung ke Agentic Wallet di dalam `mint()` (diputuskan 20:33 WIB).
 2. Konfirmasi simbol `OOBX` (asumsi — master prompt tidak memberi simbol).
-3. baseURI setelah artwork + metadata selesai.
+3. baseURI: `https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/metadata/` — repo ini sudah publik dan koleksi sudah di-push.
 4. Keputusan deploy (testnet dulu / langsung mainnet).
