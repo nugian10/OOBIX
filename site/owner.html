@@ -65,11 +65,11 @@
     <h2>Kontrak (sudah dikunci)</h2>
     <table class="dtable">
       <tr><td>Kontrak</td><td>OOBIX (OOBX), ERC-721, Solidity 0.8.24</td></tr>
-      <tr><td>Alamat kontrak</td><td class="mono">0x607840e0a3675cf2181c98453484eb785ddd2d83</td></tr>
-      <tr><td>Deploy</td><td>30 Okt 2026, 21:05 WIB &middot; blok 130678042 &middot; <a href="https://bscscan.com/address/0x607840e0a3675cf2181c98453484eb785ddd2d83" target="_blank" rel="noopener">BscScan</a></td></tr>
+      <tr><td>Alamat kontrak</td><td class="mono">0x2aE2969ae37CB39abc45375598cEE530C181838A</td></tr>
+      <tr><td>Deploy</td><td>30 Okt 2026, ~22:27 WIB &middot; blok 130688929 &middot; <a href="https://bscscan.com/address/0x2aE2969ae37CB39abc45375598cEE530C181838A" target="_blank" rel="noopener">BscScan</a> &middot; kontrak v2 (v1: 0x607840e0a3675cf2181c98453484eb785ddd2d83, 19 mint)</td></tr>
       <tr><td>Owner</td><td class="mono">0x0262e8e5E4584D8AB840fD950a6E2E0A414d4097 (My Wallet)</td></tr>
       <tr><td>Revenue wallet</td><td class="mono">0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7 (Agentic Wallet)</td></tr>
-      <tr><td>Harga on-chain</td><td>#1&ndash;500: 0,0003 BNB &middot; #501&ndash;3333: GRATIS (0 BNB). Harga adalah konstanta kontrak &mdash; tidak bisa diubah owner.</td></tr>
+      <tr><td>Harga on-chain</td><td>#1&ndash;500: 0,0003 BNB &middot; #501&ndash;3333: 0,0008 BNB. Harga terkunci setelah mint pertama (setTierPrices revert PricesLocked) &mdash; tidak bisa diubah lagi di kontrak ini.</td></tr>
       <tr><td>Mint</td><td>Agent-only: pemanggil harus memegang SPACE ID .ai Agent ID. Tanpa batas per wallet, 1 token per panggilan mint().</td></tr>
       <tr><td>Pembayaran mint</td><td>BNB yang dibayar langsung diteruskan ke Agentic Wallet <b>di dalam</b> panggilan mint() &mdash; tidak masuk ke kontrak dulu. Saldo kontrak tetap 0 dalam operasi normal.</td></tr>
       <tr><td>Audit</td><td>Tidak ada audit independen. Source terverifikasi di BscScan, 18/18 Hardhat tests lolos &mdash; itu bukan audit.</td></tr>
@@ -113,7 +113,7 @@
     <p class="mut">Biaya final ditampilkan wallet sebelum kamu menyetujui. Panggilan ini kecil (puluhan ribu gas). Perkiraan: <b id="estToggle">&mdash;</b>.</p>
     <div class="check">
       <input type="checkbox" id="confirmBox">
-      <label for="confirmBox">Saya paham: mint akan <b>dibuka untuk umum</b> (siapa pun yang memegang SPACE ID .ai Agent ID bisa mint, tanpa batas per wallet), harga #1&ndash;500 adalah 0,0003 BNB lalu GRATIS, dan pembayaran mint langsung masuk ke Agentic Wallet. Tindakan ini memakai BNB asli dan tidak bisa dibatalkan.</label>
+      <label for="confirmBox">Saya paham: mint akan <b>dibuka untuk umum</b> (siapa pun yang memegang SPACE ID .ai Agent ID bisa mint, tanpa batas per wallet), harga #1&ndash;500 adalah 0,0003 BNB dan #501&ndash;3,333 adalah 0,0008 BNB, dan pembayaran mint langsung masuk ke Agentic Wallet. Tindakan ini memakai BNB asli dan tidak bisa dibatalkan.</label>
     </div>
     <div class="btnrow">
       <button id="btnMintOn" class="btn primary" type="button" disabled>NYALAKAN MINT</button>
@@ -167,7 +167,7 @@
 <script>
 (function () {
   'use strict';
-  var CONTRACT = '0x607840e0a3675cf2181c98453484eb785ddd2d83';
+  var CONTRACT = '0x2aE2969ae37CB39abc45375598cEE530C181838A';
   var OWNER = '0x0262e8e5E4584D8AB840fD950a6E2E0A414d4097';
   var REVENUE = '0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7';
   var CHAIN_ID = 56, CHAIN_HEX = '0x38';
