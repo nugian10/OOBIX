@@ -311,10 +311,10 @@
       : "The OOBIX contract is not deployed yet. Do not mint anything until the owner gives you the deployed contract address — if there is no deployed contract address, stop and say so.";
     pre.textContent =
       "Mint one OOBIX on BNB Smart Chain (chain id 56).\n" +
-      addrLine + "\n" +
-      "First check that my wallet holds a SPACE ID .ai Agent ID — the contract only mints to wallets holding one. There is no per-wallet mint limit.\n" +
-      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Planned pricing: tokens #1-500 cost 0.0003 BNB each, tokens #501-3333 are FREE (0 BNB).\n" +
-      "Show me the exact amount before I sign, and confirm the transaction on-chain once it is done.";
+      addrLine + " Mint is OPEN.\n" +
+      "First check that my wallet holds a SPACE ID .ai Agent ID: call hasAgentId(my wallet address) on the OOBIX contract — it must return true, otherwise the mint will revert. The Agent ID registry is 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F. There is no per-wallet mint limit.\n" +
+      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Live pricing: tokens #1-500 cost 0.0003 BNB each, tokens #501-3333 are FREE (0 BNB — you still pay gas). One token per mint() call. The payment goes directly to the revenue wallet in the same call; it never sits in the contract.\n" +
+      "Show me the exact amount before I sign, and confirm the transaction on-chain once it is done: https://bscscan.com/address/" + addr;
     const btn = $("#copy-prompt");
     if (btn) {
       btn.addEventListener("click", () => {

@@ -1,11 +1,13 @@
 # OOBIX — Prompt deploy untuk Agen Binance (Agentic Wallet)
 
-> Tempel prompt ini ke agen Binance yang terhubung ke Agentic Wallet Nugraha.
-> HANYA SATU deploy yang boleh terjadi: kalau deploy dari halaman browser
-> (oobix.vercel.app/deploy) sudah berhasil duluan dan ada alamat kontraknya,
-> JANGAN deploy lagi — lewati prompt ini.
+> ⚠️ SUDAH DEPLOYED — JANGAN DEPLOY LAGI. Dokumen ini hanya arsip.
+> Kontrak sudah live sejak 30 Okt 2026 21:05 WIB:
+> alamat `0x607840e0a3675cf2181c98453484eb785ddd2d83`,
+> tx deploy `0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7`,
+> BscScan source-verified, mint sudah AKTIF sejak 21:25 WIB.
+> Kalau ada agen yang membaca prompt ini, suruh dia BERHENTI — jangan deploy kontrak baru.
 
-## Tugas
+## Tugas (sudah selesai — arsip saja)
 
 Deploy kontrak OobixNFT ke **BNB Smart Chain MAINNET (chainId 56) saja**.
 Jangan testnet. Jangan deploy dua kali.
