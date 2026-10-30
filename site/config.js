@@ -2,15 +2,21 @@
 // The contract IS deployed: OobixNFT at 0x607840e0a3675cf2181c98453484eb785ddd2d83
 // on BNB Smart Chain Mainnet (56), deployed 30 Oct 2026 21:05 WIB by My Wallet
 // (deploy tx 0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7).
-// Mint is NOT active yet (mintActive false) — the owner turns it on at launch.
+// Mint IS active since 30 Oct 2026 21:25 WIB (mintActive true).
 // Never fill in a guessed address.
+//
+// NOTE: this MUST be window.OOBIX_CONFIG (not a bare const) — app.js reads
+// window.OOBIX_CONFIG, and a top-level const in a classic script does NOT
+// attach to window. Using const here silently kills the whole site script:
+// the prompt box stays on "Loading prompt…", the copy button does nothing,
+// and the live counts never run (bug found 30 Oct 2026 21:33 WIB).
 //
 // Storage is GitHub (chosen 30 Okt 2026), NOT IPFS. The repo is
 // nugian10/OOBIX (branch main) — it exists and is PUBLIC, so these raw URLs
 // work and the gallery loads from them, wherever the site is hosted
 // (including Vercel with the site folder as root — relative ../collection
 // paths would 404 there, so the site must NOT use them).
-const OOBIX_CONFIG = {
+window.OOBIX_CONFIG = {
   CONTRACT_ADDRESS: "0x607840e0a3675cf2181c98453484eb785ddd2d83",
   CHAIN_ID: 56,
   CHAIN_NAME: "BNB Smart Chain Mainnet",

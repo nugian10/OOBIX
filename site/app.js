@@ -9,7 +9,7 @@
 
 (function () {
   "use strict";
-  const CFG = window.OOBIX_CONFIG;
+  const CFG = window.OOBIX_CONFIG || {}; // || {} so a missing config degrades instead of killing the whole script
   const $ = (sel, el) => (el || document).querySelector(sel);
   const $$ = (sel, el) => Array.from((el || document).querySelectorAll(sel));
 
@@ -319,9 +319,9 @@
     if (btn) {
       btn.addEventListener("click", () => {
         const text = pre.textContent;
-        const done = () => { btn.textContent = "COPIED"; setTimeout(() => { btn.textContent = "COPY PROMPT"; }, 2000); };
+        const done = (ok) => { btn.textContent = ok ? "COPIED" : "COPY FAILED — SELECT THE TEXT MANUALLY"; setTimeout(() => { btn.textContent = "COPY PROMPT"; }, 2500); };
         if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+          navigator.clipboard.writeText(text).then(() => done(true)).catch(() => fallbackCopy(text, done));
         } else {
           fallbackCopy(text, done);
         }
@@ -331,11 +331,18 @@
   function fallbackCopy(text, done) {
     const ta = document.createElement("textarea");
     ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.top = "0";
+    ta.style.opacity = "0";
     document.body.appendChild(ta);
+    ta.focus();
     ta.select();
-    try { document.execCommand("copy"); } catch (e) { /* clipboard unavailable */ }
+    ta.setSelectionRange(0, text.length);
+    let ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
     document.body.removeChild(ta);
-    done();
+    done(ok);
   }
 
   /* ---------- live on-chain mint state ---------- */
