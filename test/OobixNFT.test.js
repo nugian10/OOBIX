@@ -5,7 +5,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 const TIER1 = ethers.parseEther("0.0003");
-const TIER2 = 0n;
+const TIER2 = ethers.parseEther("0.0008"); // v2: tier 2 is paid (v1 was FREE = 0)
 const REAL_REGISTRY = "0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F";
 const DECK = JSON.parse(fs.readFileSync(path.join(__dirname, "..", "scripts", "deck.json"), "utf8"));
 const DECK_BYTES = ethers.getBytes(DECK.deckHex);
@@ -15,7 +15,7 @@ async function deployFixture() {
   const Mock = await ethers.getContractFactory("MockAgentIdNFT");
   const mock = await Mock.deploy();
   await mock.waitForDeployment();
-  const Factory = await ethers.getContractFactory("OobixNFT");
+  const Factory = await ethers.getContractFactory("contracts/OobixNFT.sol:OobixNFT");
   const contract = await Factory.deploy(
     owner.address,
     revenue.address,
@@ -91,7 +91,7 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
     const Mock = await ethers.getContractFactory("MockAgentIdNFT");
     const mock = await Mock.deploy();
     await mock.waitForDeployment();
-    const Factory = await ethers.getContractFactory("OobixNFT");
+    const Factory = await ethers.getContractFactory("contracts/OobixNFT.sol:OobixNFT");
     await expect(
       Factory.deploy(owner.address, revenue.address, await mock.getAddress(), "", DECK_BYTES.slice(0, 100))
     ).to.be.revertedWithCustomError(Factory, "InvalidDeck");
@@ -184,9 +184,9 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
     expect(await contract.totalSupply()).to.equal(0);
   });
 
-  it("boundary: #500 costs 0.0003, #501 is FREE (0), overpaying in the free phase reverts", async function () {
+  it("boundary: #500 costs 0.0003, #501 costs 0.0008, a 0-value mint reverts, paid #501 forwards to revenue", async function () {
     this.timeout(300000);
-    const { contract, mock, owner, alice } = await deployFixture();
+    const { contract, mock, owner, revenue, alice } = await deployFixture();
     await giveAgentId(mock, alice);
     await contract.connect(owner).setMintActive(true);
     for (let i = 0; i < 500; i++) {
@@ -195,16 +195,24 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
     expect(await contract.totalSupply()).to.equal(500);
     expect(await contract.nextTokenId()).to.equal(501);
     expect(await contract.ownerOf(500)).to.equal(alice.address);
-    expect(await contract.currentPrice()).to.equal(0);
+    expect(await contract.currentPrice()).to.equal(TIER2);
     expect(await contract.priceForTokenId(500)).to.equal(TIER1);
-    expect(await contract.priceForTokenId(501)).to.equal(0);
-    // #501 mints free, with exactly 0 value, and carries its deck rarity.
-    await expect(contract.connect(alice).mint({ value: 0 }))
+    expect(await contract.priceForTokenId(501)).to.equal(TIER2);
+    // #501 with 0 value reverts: tier 2 is paid in v2 (no free phase).
+    await expect(contract.connect(alice).mint({ value: 0 })).to.be.revertedWithCustomError(
+      contract,
+      "IncorrectPayment"
+    );
+    // #501 mints with exactly 0.0008, carries its deck rarity, forwards to revenue.
+    const revenueBefore = await ethers.provider.getBalance(revenue.address);
+    await expect(contract.connect(alice).mint({ value: TIER2 }))
       .to.emit(contract, "Minted")
-      .withArgs(alice.address, 501, 0, DECK.deck[500], anyValue);
+      .withArgs(alice.address, 501, TIER2, DECK.deck[500], anyValue);
     expect(await contract.totalSupply()).to.equal(501);
     expect(await contract.tokenRarity(501)).to.equal(DECK.deck[500]);
-    // In the free phase even 1 wei is overpayment.
+    expect(await ethers.provider.getBalance(await contract.getAddress())).to.equal(0);
+    expect(await ethers.provider.getBalance(revenue.address)).to.equal(revenueBefore + TIER2);
+    // Underpaying in tier 2 (1 wei) also reverts.
     await expect(contract.connect(alice).mint({ value: 1 })).to.be.revertedWithCustomError(
       contract,
       "IncorrectPayment"
@@ -238,7 +246,7 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
 
   it("with the real SPACE ID registry on a local chain, mint reverts NoAgentId", async function () {
     const [owner, revenue] = await ethers.getSigners();
-    const Factory = await ethers.getContractFactory("OobixNFT");
+    const Factory = await ethers.getContractFactory("contracts/OobixNFT.sol:OobixNFT");
     const contract = await Factory.deploy(owner.address, revenue.address, REAL_REGISTRY, "", DECK_BYTES);
     await contract.waitForDeployment();
     expect(await contract.agentIdRegistry()).to.equal(REAL_REGISTRY);
@@ -250,9 +258,9 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
     );
   });
 
-  it("tier prices: tier2 may be 0, tier1 must stay >0, changeable only before the first mint", async function () {
+  it("tier prices: tier2 may be 0 before the first mint, tier1 must stay >0, changeable only before the first mint", async function () {
     const { contract, mock, owner, alice } = await deployFixture();
-    // Free tier is allowed: setting tier2 = 0 is valid (it already is 0).
+    // v2 default is 0.0008, but setting tier2 = 0 pre-mint is still valid.
     await contract.connect(owner).setTierPrices(ethers.parseEther("0.0004"), 0);
     expect(await contract.priceTier1()).to.equal(ethers.parseEther("0.0004"));
     expect(await contract.priceTier2()).to.equal(0);
@@ -321,7 +329,7 @@ describe("OobixNFT (WEDO model, OOBIX rules)", function () {
     await giveAgentId(mock, alice);
     await contract.connect(owner).setMintActive(true);
     for (let i = 1; i <= 3333; i++) {
-      await contract.connect(alice).mint({ value: i <= 500 ? TIER1 : 0 });
+      await contract.connect(alice).mint({ value: i <= 500 ? TIER1 : TIER2 });
     }
     expect(await contract.totalSupply()).to.equal(3333);
     expect(await contract.totalMinted()).to.equal(3333);
