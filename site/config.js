@@ -2,8 +2,8 @@
 // The v2 contract IS deployed: OobixNFT at 0x2aE2969ae37CB39abc45375598cEE530C181838A
 // on BNB Smart Chain Mainnet (56), deployed 30 Oct 2026 ~22:27 WIB by My Wallet
 // (deploy tx 0xe26f701815d0d646747ae86c36ad515f305e604c3e9e5459d1da38fac99d8bac,
-// block 130688929). Mint is NOT active yet (mintActive false) — it opens
-// when the owner activates it. v1 contract 0x607840e0a3675cf2181c98453484eb785ddd2d83
+// block 130688929). Mint is LIVE since 30 Oct 2026 ~22:39 WIB
+// (mintActive true, activated by the owner). v1 contract 0x607840e0a3675cf2181c98453484eb785ddd2d83
 // (19 minted, tier 2 FREE) is superseded and stays live on-chain.
 // Never fill in a guessed address.
 //

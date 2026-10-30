@@ -4,7 +4,7 @@
    and the five rarities. If the collection files are not there yet,
    the site shows honest "not yet published" states.
    The v2 contract IS deployed (0x2aE2969ae37CB39abc45375598cEE530C181838A)
-   and mint is NOT active yet — it opens when the owner activates it.
+   and mint is LIVE since 30 Oct 2026 ~22:39 WIB.
    Minted counts are read live from the chain (refreshLiveMint);
    static numbers are fallbacks only. v1 (0x607840e0a3675cf2181c98453484eb785ddd2d83)
    had 19 mints and stays live on-chain. */
@@ -115,8 +115,8 @@
       note.textContent = known === 0
         ? "Collection artwork has not been published yet. Counts update here automatically once the collection files land."
         : known < CFG.TOTAL_SUPPLY
-          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Mint is OPEN — loading live minted count from the chain…"
-          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Mint is OPEN — loading live minted count from the chain…";
+          ? known.toLocaleString("en-US") + " of " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published so far. Mint is LIVE — loading live minted count from the chain…"
+          : "All " + CFG.TOTAL_SUPPLY.toLocaleString("en-US") + " artworks published. Mint is LIVE — loading live minted count from the chain…";
     }
   }
 
@@ -286,8 +286,8 @@
     }
     if (meta && meta.name) rows.push(["Name", meta.name]);
     const minted = liveTotal != null && id <= liveTotal;
-    rows.push(["Status", minted ? "Minted on-chain" : "Not minted yet — mint is OPEN"]);
-    rows.push(["Total minted on-chain", liveTotal == null ? "Mint is OPEN — live count loads on the Mint page" : String(liveTotal) + " (live, on-chain)"]);
+    rows.push(["Status", minted ? "Minted on-chain" : "Not minted yet — mint is LIVE"]);
+    rows.push(["Total minted on-chain", liveTotal == null ? "Mint is LIVE — live count loads on the Mint page" : String(liveTotal) + " (live, on-chain)"]);
     const body = $("#detail-attrs");
     if (body) {
       body.innerHTML = rows.map((r) =>
@@ -307,10 +307,10 @@
   // The prompt's mint-state line is built from the live chain state:
   // buildPrompt() runs once at load (state unknown → "checking" line) and
   // again from refreshLiveMint() once mintActive() has been read, so the
-  // prompt never claims OPEN while the contract says closed.
+  // prompt never claims LIVE while the contract says closed.
   function promptStateText() {
     if (liveActive === null) return "Mint status is read live from the contract — check the status banner on this page before minting.";
-    if (liveActive) return "Mint is OPEN.";
+    if (liveActive) return "Mint is LIVE.";
     return "Mint is NOT active yet — do not mint until the owner activates it.";
   }
   function buildPrompt() {
@@ -393,9 +393,9 @@
       if (el) el.textContent = String(liveTotal);
     }
     const note = $("#stats-note");
-    if (note) note.textContent = liveActive ? "Mint is OPEN. " + liveTotal + " minted on-chain so far." : "Mint is not active. " + liveTotal + " minted on-chain so far.";
+    if (note) note.textContent = liveActive ? "Mint is LIVE. " + liveTotal + " minted on-chain so far." : "Mint is not active. " + liveTotal + " minted on-chain so far.";
     $$(".js-contract-status").forEach((el) => {
-      el.innerHTML = '<span class="dot"></span><span>' + (liveActive ? "MINT IS OPEN — " + liveTotal + " MINTED SO FAR" : "CONTRACT DEPLOYED — MINT NOT ACTIVE") + " — " + esc(CFG.CONTRACT_ADDRESS) + "</span>";
+      el.innerHTML = '<span class="dot"></span><span>' + (liveActive ? "MINT IS LIVE — " + liveTotal + " MINTED SO FAR" : "CONTRACT DEPLOYED — MINT NOT ACTIVE") + " — " + esc(CFG.CONTRACT_ADDRESS) + "</span>";
     });
   }
 
