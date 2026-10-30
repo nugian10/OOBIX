@@ -1,10 +1,16 @@
 # OOBIX v2 — Prompt deploy untuk Agen Binance (Agentic Wallet)
 
+> ⛔ **SUDAH DEPLOYED — JANGAN DEPLOY LAGI.**
+> v2 live di `0x2aE2969ae37CB39abc45375598cEE530C181838A` (deploy 30 Okt 2026
+> ~22:27 WIB, blok 130688929, tx `0xe26f701815d0d646747ae86c36ad515f305e604c3e9e5459d1da38fac99d8bac`,
+> biaya 0,00032966 BNB, BscScan source-verified). Prompt ini tinggal arsip —
+> jangan dipakai untuk deploy kontrak ketiga.
+
 > ⚠️ INI DEPLOY v2 (REDEPLOY) — BUKAN deploy pertama.
 > Kontrak v1 sudah live sejak 30 Okt 2026 21:05 WIB:
 > alamat `0x607840e0a3675cf2181c98453484eb785ddd2d83`,
 > tx deploy `0x4abc4f232a3130c8f3b8b8cc1378872828d3d0227a145948bccb1aa099fe10f7`,
-> BscScan source-verified, mint AKTIF sejak 21:25 WIB, 16 token sudah di-mint.
+> BscScan source-verified, mint AKTIF sejak 21:25 WIB, 19 token sudah di-mint.
 > v1 TIDAK BISA diubah harganya (`setTierPrices` revert `PricesLocked` setelah
 > mint pertama) — karena itu pemilik menyetujui redeploy sebagai v2.
 > Satu-satunya beda v2: harga #501–3.333 menjadi **0,0008 BNB** (v1 GRATIS).

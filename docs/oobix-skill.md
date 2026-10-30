@@ -7,11 +7,11 @@ Dokumen ini adalah instruksi untuk agen yang akan melakukan mint OOBIX. Modelnya
 | Item | Nilai |
 |---|---|
 | Nama | OOBIX — Alien Pet NFT Collection |
-| Simbol | OOBX (asumsi — master prompt tidak memberi simbol; konfirmasi sebelum deploy) |
+| Simbol | OOBX (dikonfirmasi pemilik 30 Okt 2026 21:00 WIB) |
 | Standar | ERC-721 |
 | Chain | BNB Smart Chain, Chain ID 56 |
 | Total supply | 3.333 |
-| Kontrak | v2 (redeploy, BELUM di-deploy — halaman deploy sudah siap): tier 2 = 0,0008 BNB. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` — di-deploy 30 Okt 2026 21:05 WIB (blok 130678042), 16 mint, tier 2 GRATIS; harganya TERKUNCI dan digantikan v2 setelah deploy. |
+| Kontrak | v2 `0x2aE2969ae37CB39abc45375598cEE530C181838A` — di-deploy 30 Okt 2026 ~22:27 WIB (blok 130688929), BscScan source-verified, mint BELUM aktif. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` — di-deploy 30 Okt 2026 21:05 WIB (blok 130678042), 19 mint, tier 2 GRATIS; harganya TERKUNCI dan digantikan v2. |
 | Harga | #1–500: 0,0003 BNB per NFT; #501–3.333: 0,0008 BNB per NFT (v2; v1 GRATIS tapi harganya terkunci dan sudah digantikan) |
 | Mint | `mint()`, tanpa argumen, 1 token per panggilan, selector `0x1249c58b` |
 | Gate | Harus memegang SPACE ID .ai Agent ID NFT `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` |

@@ -2,7 +2,7 @@
 
 Kontrak: `contracts/OobixNFT.sol` — `OOBIX` / `OOBX`, ERC-721, Solidity 0.8.24, OpenZeppelin 5.4.0, optimizer runs 200, EVM Cancun. Compile bersih (0 error, 0 warning). Creation bytecode 10.894 byte, runtime bytecode 9.137 byte. ABI 97 entri di `abi/OobixNFT.abi.json`.
 
-> **v2 (30 Okt 2026, 22:16 WIB):** redeploy disetujui pemilik — tier 2 berubah dari GRATIS (0 BNB) menjadi **0,0008 BNB**. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` (16 mint, tier 2 GRATIS) tidak bisa diubah harganya — `setTierPrices` revert `PricesLocked` setelah mint pertama — jadi digantikan v2 setelah deploy. Deck, alamat, dan semua aturan lain SAMA seperti v1. v2 BELUM di-deploy; halaman deploy `site/deploy.html` sudah dibuat ulang dengan bytecode v2.
+> **v2 (30 Okt 2026, 22:16 WIB):** redeploy disetujui pemilik — tier 2 berubah dari GRATIS (0 BNB) menjadi **0,0008 BNB**. v1 `0x607840e0a3675cf2181c98453484eb785ddd2d83` (19 mint, tier 2 GRATIS) tidak bisa diubah harganya — `setTierPrices` revert `PricesLocked` setelah mint pertama. **v2 DEPLOYED 30 Okt 2026 ~22:27 WIB di `0x2aE2969ae37CB39abc45375598cEE530C181838A`** (tx `0xe26f701815d0d646747ae86c36ad515f305e604c3e9e5459d1da38fac99d8bac`, blok 130688929, biaya 0,00032966 BNB), BscScan source-verified, mint BELUM aktif. Deck, alamat, dan semua aturan lain SAMA seperti v1.
 
 ## Model WEDO — yang diambil dari wedo.wtf
 
