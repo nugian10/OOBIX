@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ — OOBIX</title>
+<meta name="description" content="OOBIX FAQ — the collection, the blockchain, agent-only minting, supply, pricing and ownership.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html">OOBIX<span class="star">✦</span></a>
+    <div class="nav-links">
+      <a href="collection.html">Collection</a>
+      <a href="mint.html">Mint</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero wrap" style="padding-bottom:0;">
+    <p class="eyebrow">FAQ <span>—</span> Questions, Answered Honestly</p>
+    <h2 style="margin-top:14px;">Frequently Asked Questions</h2>
+    <p style="margin-top:20px;"><span class="status js-contract-status"><span class="dot"></span><span>CONTRACT NOT DEPLOYED YET — MINTING OPENS AFTER DEPLOY</span></span></p>
+  </section>
+
+  <section class="section wrap">
+    <div class="faq-item">
+      <h3>What is OOBIX?</h3>
+      <p>OOBIX is a collection of 3,333 alien pet NFTs in a retro Saturday
+      morning cartoon style — flat 2D, bold outlines, bright colors. Each
+      alien is a different species with its own body, face and mood. The
+      tagline is "Weird Little Universe."</p>
+    </div>
+    <div class="faq-item">
+      <h3>Which blockchain is it on?</h3>
+      <p>BNB Smart Chain Mainnet (chain ID 56). The tokens are ERC-721 NFTs.
+      The contract is not deployed yet, so there is no contract address and
+      nothing is minted.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How does minting work?</h3>
+      <p>Minting is agent-only. There is no mint button on this site and no
+      wallet connection here. You give a prompt to your own Binance Agentic
+      Wallet agent, the agent calls <span class="mono">mint()</span> on the
+      contract, and you approve the transaction in your own wallet. The
+      contract only mints to wallets holding a SPACE ID .ai Agent ID.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How much does it cost to mint?</h3>
+      <p>Planned pricing, from the contract draft: tokens #1–500 cost 0.0003
+      BNB each; tokens #501–3,333 are FREE (0 BNB). The exact price is always
+      read from the contract by your agent before you sign — never pay an
+      amount shown anywhere else. Nothing is live yet.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Is there a limit per wallet?</h3>
+      <p>No. There is no per-wallet mint limit. The same wallet may mint
+      again, one token per <span class="mono">mint()</span> call.</p>
+    </div>
+    <div class="faq-item">
+      <h3>How is rarity decided?</h3>
+      <p>By a gacha deck. All 3,333 deck slots are shuffled once before
+      minting opens and the deck hash is committed on-chain. Mint #n opens
+      deck slot #n, so the rarity is revealed the moment the mint confirms.
+      Counts: Common 2,000, Uncommon 800, Rare 333, Epic 150, Legendary 50.</p>
+    </div>
+    <div class="faq-item">
+      <h3>What do I own when I mint?</h3>
+      <p>An ERC-721 NFT on BNB Smart Chain: one specific alien, with its own
+      token ID, artwork and metadata. You can transfer it like any other
+      ERC-721 token. Ownership is recorded on-chain, not on this website.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Where are the artwork and metadata stored?</h3>
+      <p>Storage is planned on GitHub (repo <span class="mono">nugian10/OOBIX</span>,
+      branch main — the repo does not exist yet, and it must be public for
+      the raw file URLs to work). The metadata image URLs point at the
+      GitHub raw files. No IPFS pin is planned.</p>
+    </div>
+    <div class="faq-item">
+      <h3>Has the contract been audited?</h3>
+      <p>No. There is no independent audit. The contract is a draft, it has
+      Hardhat tests, and its source will be published for verification on
+      BscScan after deploy — but source verification is not an audit.</p>
+    </div>
+    <div class="faq-item">
+      <h3>When does minting open?</h3>
+      <p>After the contract is deployed and the owner activates minting. The
+      contract is not deployed yet, so there is no date to give. This site
+      will show the deployed contract address once it exists.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>OOBIX — Weird Little Universe</span>
+    <span>BNB Smart Chain · ERC-721 · 3,333 Alien Pets</span>
+    <span><a href="#">X (Twitter)</a> · <a href="#">Discord</a> — links not yet set</span>
+    <span>Contract: <span class="js-contract-address">Not deployed yet</span></span>
+    <span class="warn">Contract not deployed yet. No independent audit.</span>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

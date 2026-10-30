@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OOBIX — Weird Little Universe</title>
+<meta name="description" content="OOBIX — 3,333 retro cartoon alien pets on BNB Smart Chain. Weird Little Universe. Agent-only minting.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html">OOBIX<span class="star">✦</span></a>
+    <div class="nav-links">
+      <a href="collection.html">Collection</a>
+      <a href="mint.html">Mint</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">Alien Pet Collection — Retro Cartoon Universe</p>
+        <h1><span class="o">OO</span><span class="b">BIX</span></h1>
+        <p class="tagline">Weird Little Universe.</p>
+        <p class="lede">3,333 strange, funny, expressive alien pets from a
+        Saturday morning cartoon that never aired. Bold outlines, flat
+        colors, big feelings — every OOBIX is a different species.</p>
+        <p><span class="status js-contract-status"><span class="dot"></span><span>CONTRACT NOT DEPLOYED YET — MINTING OPENS AFTER DEPLOY</span></span></p>
+        <div class="hero-cta">
+          <a class="btn primary" href="collection.html">Meet the Aliens</a>
+          <a class="btn" href="mint.html">How Minting Works</a>
+          <a class="btn pink" href="about.html">About OOBIX</a>
+        </div>
+      </div>
+      <figure class="mascot">
+        <img src="assets/mascot.webp" alt="OOBIX alien pet — dark blue spiky cyclops with a big grin">
+        <figcaption>MEET ONE OF THE 3,333 — A SPIKY CYCLOPS, VERY PLEASED WITH ITSELF.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section wrap" aria-label="Collection statistics">
+    <div class="stats" id="stats">
+      <div class="stat"><div class="num" data-stat="total">3,333</div><div class="lbl">Alien Pets</div></div>
+      <div class="stat"><div class="num" data-stat="species">8</div><div class="lbl">Species</div></div>
+      <div class="stat"><div class="num" data-stat="published">—</div><div class="lbl">Artworks Published</div></div>
+      <div class="stat"><div class="num" data-stat="supply">0</div><div class="lbl">Minted On-Chain</div></div>
+    </div>
+    <p class="small muted" id="stats-note" style="margin-top:14px;">Counts are read from the collection files at runtime. Minted on-chain is 0 because the contract is not deployed yet.</p>
+  </section>
+
+  <section class="section wrap" aria-label="Featured aliens">
+    <div class="section-head">
+      <h2>Featured Aliens</h2>
+      <a href="collection.html">View all 3,333 →</a>
+    </div>
+    <div class="grid" id="featured">
+      <div class="empty" style="grid-column: 1 / -1;">LOADING FEATURED ALIENS…</div>
+    </div>
+    <p class="small muted" style="margin-top:16px;">First up: the teal one-eye, the tall yellow three-eyes, the little purple blob and the spiky cyclops — the four preview aliens.</p>
+  </section>
+
+  <section class="section wrap">
+    <hr class="rule">
+    <div class="section-head"><h2>The Collection</h2></div>
+    <div class="prose">
+      <p>OOBIX is a collection of <strong>3,333 ERC-721 alien pets</strong> on
+      BNB Smart Chain Mainnet. Each one is drawn as a flat 2D retro cartoon —
+      a different species, a different face, a different mood. Rarity comes
+      from a gacha deck committed on-chain before minting opens:
+      <strong>Common 2,000 · Uncommon 800 · Rare 333 · Epic 150 · Legendary 50</strong>.</p>
+      <p>Minting is agent-only. There is no public mint button on this site.
+      You talk to your agent, your agent talks to the chain, and the alien
+      finds its owner. <a href="mint.html" style="text-decoration:underline;">How minting works →</a></p>
+      <p>Planned pricing: the first 500 aliens cost <strong>0.0003 BNB</strong>
+      each, then minting is <strong>FREE</strong> from #501 to #3,333. That is
+      the plan in the contract draft — nothing is live yet.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>OOBIX — Weird Little Universe</span>
+    <span>BNB Smart Chain · ERC-721 · 3,333 Alien Pets</span>
+    <span><a href="#">X (Twitter)</a> · <a href="#">Discord</a> — links not yet set</span>
+    <span>Contract: <span class="js-contract-address">Not deployed yet</span></span>
+    <span class="warn">Contract not deployed yet. No independent audit.</span>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

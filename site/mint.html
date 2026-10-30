@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mint — OOBIX</title>
+<meta name="description" content="OOBIX minting is agent-only. Talk to your Binance Agentic Wallet agent — there is no mint button on this site.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html">OOBIX<span class="star">✦</span></a>
+    <div class="nav-links">
+      <a href="collection.html">Collection</a>
+      <a href="mint.html">Mint</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+  </nav>
+</header>
+
+<main>
+  <section class="hero wrap" style="padding-bottom:0;">
+    <p class="eyebrow">Agent-Only Minting <span>—</span> No Button Here</p>
+    <h2 style="margin-top:14px;">Mint Through Your Agent</h2>
+    <p class="lede" style="margin-top:16px;">OOBIX has no mint button, no wallet
+    connection and no on-page sale. Minting happens through your own
+    Binance Agentic Wallet agent — the agent reads the chain, you approve
+    in your wallet, the chain confirms. Your agent must hold a SPACE ID
+    Agent ID: the contract only mints to wallets holding one.</p>
+    <p style="margin-top:20px;"><span class="status js-contract-status"><span class="dot"></span><span>CONTRACT NOT DEPLOYED YET — MINTING OPENS AFTER DEPLOY</span></span></p>
+  </section>
+
+  <section class="section wrap">
+    <h2>Mint Information</h2>
+    <p class="muted" style="max-width:680px;margin-top:12px;">These are the
+    <strong>planned</strong> numbers from the contract draft. They are not live
+    chain data — there is no deployed contract yet, so total minted is 0 and
+    the mint has not started.</p>
+    <table class="price-table">
+      <tr><th>Total supply</th><td>3,333</td></tr>
+      <tr><th>Total minted</th><td>0 — contract not deployed yet</td></tr>
+      <tr><th>Remaining supply</th><td>3,333 (planned)</td></tr>
+      <tr><th>Current mint phase</th><td>Not started — contract not deployed yet</td></tr>
+      <tr><th>Planned price, tokens #1–500</th><td>0.0003 BNB each</td></tr>
+      <tr><th>Planned price, tokens #501–3,333</th><td>FREE (0 BNB)</td></tr>
+      <tr><th>Per-wallet limit</th><td>None — the same wallet may mint again, one token per call</td></tr>
+      <tr><th>Agent status</th><td>Agent-only: minter must hold a SPACE ID .ai Agent ID</td></tr>
+    </table>
+  </section>
+
+  <section class="section wrap" style="padding-top:0;">
+    <div class="steps">
+      <div class="step">
+        <div class="n">01</div>
+        <div>
+          <h3>Talk to your agent</h3>
+          <p>Open your Binance Agentic Wallet agent and paste the prompt below.
+          Your agent is the only thing that talks to the contract — this site
+          never touches your wallet.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">02</div>
+        <div>
+          <h3>Your agent checks the chain</h3>
+          <p>The agent reads the deployed contract: total minted, whether
+          minting is active, the price of the next token, and whether your
+          wallet holds an Agent ID.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">03</div>
+        <div>
+          <h3>Your agent shows the price before you sign</h3>
+          <p>Tokens #1–500 are planned at 0.0003 BNB each; from #501 onward
+          minting is planned to be FREE. The agent reads the exact price from
+          the contract and shows it to you before you sign — never pay an
+          amount shown anywhere else.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">04</div>
+        <div>
+          <h3>You approve in your wallet</h3>
+          <p>You review the transaction in your own wallet and approve it
+          yourself. Nothing is signed on your behalf by this site.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="n">05</div>
+        <div>
+          <h3>On-chain confirmation — and the reveal</h3>
+          <p>Once the transaction confirms on BNB Smart Chain, the alien is
+          yours. Each mint opens the next slot of the gacha deck, so its
+          rarity is revealed the moment the mint confirms.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap" style="padding-top:0;">
+    <h2>Prompt for Your Agent</h2>
+    <p class="muted" style="max-width:640px;">Copy this into your Binance Agentic
+    Wallet agent. It references the deployed contract address once one exists —
+    until then it tells the agent to stop, because there is nothing to mint yet.</p>
+    <div class="prompt-box">
+      <pre id="agent-prompt">Loading prompt…</pre>
+      <button class="btn" id="copy-prompt" type="button">Copy Prompt</button>
+    </div>
+    <p class="small muted">Contract address: <span class="mono js-contract-address">Not deployed yet — no contract address exists.</span></p>
+    <div class="note" style="margin-top:28px;">
+      <p><strong>Honest note.</strong> Minting is not live. The contract has not
+      been deployed, and minting can only be activated by the owner after
+      deploy. Until then, every alien in the collection is unminted, and no
+      transaction you are shown for OOBIX is real.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap foot">
+    <span>OOBIX — Weird Little Universe</span>
+    <span>BNB Smart Chain · ERC-721 · 3,333 Alien Pets</span>
+    <span><a href="#">X (Twitter)</a> · <a href="#">Discord</a> — links not yet set</span>
+    <span>Contract: <span class="js-contract-address">Not deployed yet</span></span>
+    <span class="warn">Contract not deployed yet. No independent audit.</span>
+  </div>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
