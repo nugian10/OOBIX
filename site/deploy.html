@@ -50,9 +50,9 @@
   <p class="lede">Kontrak OOBIX <b>v2</b> (OOBX), ERC-721, 3.333 alien pets. Deploy dari My Wallet kamu, pembayaran mint langsung ke Agentic Wallet.</p>
 
   <div class="dbox dwarn">
-    <h2>Ini deploy v2 &mdash; bukan deploy pertama</h2>
-    <p>Kontrak v1 (<span class="mono">0x6078...2d83</span>, 16 mint, tier 2 GRATIS) <b>tetap live</b> dan tidak bisa diubah harganya — harga terkunci sejak mint pertama. Halaman ini men-deploy <b>kontrak v2 yang baru</b>, satu-satunya beda: harga #501&ndash;3.333 menjadi <b>0,0008 BNB</b> (bukan GRATIS lagi). Deck, alamat, dan semua aturan lain sama persis dengan v1.</p>
-    <p>Deploy <b>sekali saja</b>. Setelah v2 live, situs akan disambung ulang ke alamat v2; 16 token v1 tetap tinggal di kontrak v1. Mint tetap <b>nonaktif</b> setelah deploy.</p>
+    <h2>SUDAH DEPLOYED &mdash; JANGAN DEPLOY LAGI</h2>
+    <p>Kontrak v2 sudah live di <span class="mono">0x2aE2969ae37CB39abc45375598cEE530C181838A</span> (deploy 30 Okt 2026 ~22:27 WIB, blok 130688929, tx <span class="mono">0xe26f70...8bac</span>, <a href="https://bscscan.com/address/0x2aE2969ae37CB39abc45375598cEE530C181838A" target="_blank" rel="noopener">BscScan</a> &mdash; source terverifikasi). Tombol deploy di bawah sudah dimatikan. Deploy lagi hanya akan membuat kontrak ketiga yang tidak terpakai.</p>
+    <p>Kontrak v1 (<span class="mono">0x6078...2d83</span>, 19 mint, tier 2 GRATIS) tetap live di chain &mdash; token-tokennya tidak pindah. Situs sekarang menunjuk ke v2.</p>
   </div>
 
   <div class="dbox">
@@ -116,7 +116,7 @@
       <input type="checkbox" id="confirmBox">
       <label for="confirmBox">Saya mengerti: ini <b>Mainnet BNB asli</b>, deploy <b>tidak bisa dibatalkan</b>, owner = My Wallet <span class="mono">0x0262...4097</span>, penerima hasil = Agentic Wallet <span class="mono">0x89c3...47B7</span>, gas dibayar dari My Wallet yang terhubung, deck sudah terverifikasi, dan mint tetap <b>nonaktif</b> setelah deploy.</label>
     </div>
-    <button id="deployBtn" class="btn primary" type="button" disabled>Deploy ke Mainnet</button>
+    <button id="deployBtn" class="btn primary" type="button" disabled>SUDAH DEPLOYED — JANGAN DEPLOY LAGI</button>
     <p id="deployStatus" class="mut"></p>
   </div>
 
@@ -167,10 +167,9 @@ const $ = (id) => document.getElementById(id);
 const setStatus = (el, msg, cls) => { el.textContent = msg; el.className = cls || "mut"; };
 
 function refreshDeployBtn() {
-  const ok = deckOk
-    && account && account.toLowerCase() === MY_WALLET.toLowerCase()
-    && $("confirmBox").checked;
-  $("deployBtn").disabled = !ok;
+  // v2 SUDAH DEPLOYED (30 Okt 2026 ~22:27 WIB) — tombol deploy dimatikan
+  // permanen supaya tidak ada yang deploy kontrak ketiga.
+  $("deployBtn").disabled = true;
 }
 
 async function verifyDeck() {
