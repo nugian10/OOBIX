@@ -66,7 +66,7 @@ Deviasi lain: 5 tier rarity OOBIX (Common/Uncommon/Rare/Epic/Legendary) vs 5 tie
 - Revenue: **DIKONFIRMASI Nugraha 20:30 WIB 30 Okt** — Binance Agentic Wallet `0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7`. **Pembayaran mint LANGSUNG ke sini** — setiap mint berbayar meneruskan `msg.value` langsung ke Agentic Wallet di dalam `mint()` yang sama, tidak masuk kontrak dulu (diputuskan Nugraha 20:33 WIB 30 Okt). Bukan pola XOVRATH (owner = Agentic) yang ditolak untuk OOBIX.
 - Alternatif XOVRATH (owner = revenue = Agentic Wallet) DITOLAK untuk OOBIX — owner tetap My Wallet.
 - Agent ID registry: SPACE ID .ai NFT `0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F` (bisa diubah owner kalau SPACE ID migrasi; cek bisa dimatikan owner via `setAgentIdCheckRequired(false)` — kalau dimatikan, mint jadi permissionless on-chain).
-- baseURI: **Penyimpanan GitHub (diputuskan Nugraha 20:25 WIB 30 Okt, BUKAN IPFS)** — yang direncanakan: `https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/metadata/` (repo publik `nugian10/OOBIX`, branch main — repo BELUM ADA, URL baru aktif setelah repo dibuat dan koleksi di-push). Harus diakhiri `/`.
+- baseURI: **Penyimpanan GitHub (diputuskan Nugraha 20:25 WIB 30 Okt, BUKAN IPFS)** — `https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/metadata/` (repo publik `nugian10/OOBIX`, branch main — repo SUDAH ADA dan koleksi sudah di-push 20:47 WIB 30 Okt, raw URLs terverifikasi 200). Harus diakhiri `/`.
 
 ## Fungsi (ringkas)
 

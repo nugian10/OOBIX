@@ -10,11 +10,10 @@
 //
 // The deployer pays gas only. Owner / revenue / agentIdRegistry /
 // baseURI / deck are constructor arguments — the deployer address
-// does NOT have to be the owner. Owner and revenue are NOT
-// confirmed for OOBIX yet: fill OWNER_ADDRESS and REVENUE_WALLET
-// in .env only after Nugraha confirms them (proposal in
-// docs/SMART_CONTRACT.md: owner My Wallet, revenue Agentic
-// Wallet, same as Mythora/MythRealm/MINTFORM).
+// does NOT have to be the owner. Owner and revenue were CONFIRMED by
+// Nugraha 20:30 WIB 30 Oct 2026 (owner My Wallet, revenue Agentic
+// Wallet, same as Mythora/MythRealm/MINTFORM) and are already filled
+// in .env.example; BASE_URI is live (GitHub raw, verified 200).
 // Minting: mint() takes no arguments, mints 1, requires the
 // minter to hold a SPACE ID .ai Agent ID, value must equal
 // currentPrice() exactly (0 in the free phase, #501+).
