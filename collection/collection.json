@@ -1,0 +1,48 @@
+{
+  "total": 3333,
+  "rarities": {
+    "Common": 2000,
+    "Rare": 333,
+    "Uncommon": 800,
+    "Legendary": 50,
+    "Epic": 150
+  },
+  "species": {
+    "Wide Flat": 431,
+    "Tall Thin": 432,
+    "Round Blob": 403,
+    "Long Neck": 423,
+    "One-Eye Orb": 426,
+    "Floating Jelly": 428,
+    "Spiky": 400,
+    "Quadruped": 390
+  },
+  "backgrounds": {
+    "Green": 472,
+    "Pink": 482,
+    "Black": 491,
+    "Cream": 458,
+    "Yellow": 411,
+    "Purple": 521,
+    "Blue": 498
+  },
+  "bodyColors": {
+    "Green": 433,
+    "Cream": 394,
+    "Yellow": 426,
+    "Blue": 392,
+    "Orange": 447,
+    "Purple": 403,
+    "Teal": 416,
+    "Pink": 422
+  },
+  "imageBase": "https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/images/",
+  "metadataBase": "https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/metadata/",
+  "generator": "art/generate.py",
+  "deckHash": "0xb44bbbfc75bc6bfda8673ea71b6eef7a3389c78d0e30de7b7937c930acddc1a5",
+  "seed": "OOBIX-DECK-SEED-2026-10-30-v1",
+  "contract": {
+    "status": "not deployed",
+    "address": ""
+  }
+}
