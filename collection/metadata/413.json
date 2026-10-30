@@ -1,0 +1,39 @@
+{
+  "name": "OOBIX \u2014 Alien #0413",
+  "description": "OOBIX \u2014 Alien Pet #0413. One of 3,333 retro cartoon alien pets on BNB Smart Chain. Bold outlines, flat colours, big feelings, weird little universe. Agent-only mint. WEIRD LITTLE UNIVERSE.",
+  "image": "https://raw.githubusercontent.com/nugian10/OOBIX/main/collection/images/413.svg",
+  "attributes": [
+    {
+      "trait_type": "Species",
+      "value": "Tall Thin"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Common"
+    },
+    {
+      "trait_type": "Body Color",
+      "value": "Yellow"
+    },
+    {
+      "trait_type": "Eyes",
+      "value": "2 Star"
+    },
+    {
+      "trait_type": "Expression",
+      "value": "Happy"
+    },
+    {
+      "trait_type": "Antenna",
+      "value": "Two Ball Antennae"
+    },
+    {
+      "trait_type": "Limbs",
+      "value": "Two Arms + Two Legs"
+    },
+    {
+      "trait_type": "Background",
+      "value": "Black"
+    }
+  ]
+}
