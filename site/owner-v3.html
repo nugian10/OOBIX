@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Owner OOBIX &mdash; Kontrol Mint</title>
+<meta name="description" content="Halaman owner OOBIX: nyalakan/matikan mint dan withdraw. Hanya owner (My Wallet) yang bisa menggunakannya.">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .deploy-wrap{max-width:760px;margin:0 auto;padding:32px 24px 64px}
+  .dbox{border:3px solid var(--ink);border-radius:20px;background:var(--paper);padding:20px 22px;margin:20px 0;box-shadow:5px 5px 0 var(--ink)}
+  .dwarn{background:#ffe9a8}
+  .dwarn h2{color:var(--ink)}
+  .ok{color:#1d7a3d;font-weight:700}
+  .bad{color:#c22f2f;font-weight:700}
+  .mut{color:var(--grey)}
+  .mono{font-family:"Courier New",Courier,monospace;word-break:break-all;font-size:13px}
+  .dbox label{display:block;margin:12px 0 4px;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--grey)}
+  .dbox input[type=text]{width:100%;background:var(--cream);border:3px solid var(--ink);border-radius:10px;color:var(--ink);padding:10px 12px;font-family:"Courier New",Courier,monospace;font-size:13px;box-sizing:border-box}
+  .dbox button{cursor:pointer}
+  .dbox button:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:4px 4px 0 var(--ink)}
+  .check{display:flex;gap:12px;align-items:flex-start;margin:16px 0}
+  .check input{margin-top:4px;width:18px;height:18px;flex:0 0 auto;accent-color:var(--purple)}
+  .check label{margin:0;text-transform:none;letter-spacing:0;font-size:15px;color:var(--ink);font-weight:400}
+  table.dtable{width:100%;border-collapse:collapse;font-size:15px}
+  table.dtable td{padding:8px 4px;border-bottom:2px solid #e8dcc0;vertical-align:top}
+  table.dtable td:first-child{color:var(--grey);width:44%}
+  .hidden{display:none}
+  .bigstate{font-family:"Arial Black","Trebuchet MS",sans-serif;font-size:34px;line-height:1.1}
+  .bigstate.off{color:#c22f2f}
+  .bigstate.on{color:#1d7a3d}
+  .badge{display:inline-block;min-width:26px;text-align:center;font-weight:900;border:3px solid var(--ink);border-radius:50%;padding:1px 6px;margin-right:8px}
+  .badge.ok{color:#1d7a3d}
+  .badge.bad{color:#c22f2f}
+  .btnrow{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .btnrow .btn{flex:1 1 200px}
+</style>
+</head>
+<body>
+<header class="site">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="index.html">OOBIX<span class="star">&#10022;</span></a>
+    <div class="nav-links">
+      <a href="collection.html">Collection</a>
+      <a href="mint.html">Mint</a>
+      <a href="about.html">About</a>
+      <a href="faq.html">FAQ</a>
+    </div>
+  </nav>
+</header>
+
+<main class="deploy-wrap">
+  <p><a href="index.html">&larr; Kembali ke OOBIX</a></p>
+  <p class="eyebrow">Owner &mdash; Kontrol Mint &middot; BNB Smart Chain Mainnet</p>
+  <h1>Owner OOBIX</h1>
+  <p class="lede">Nyalakan atau matikan mint, dan withdraw dana kontrak. Halaman ini <b>hanya untuk owner</b> (My Wallet) dan <b>tidak ditautkan dari menu situs</b> &mdash; hanya yang memegang link ini yang membukanya.</p>
+
+  <div class="dbox dwarn">
+    <h2>Baca dulu</h2>
+    <p>Halaman ini <b>tidak pernah</b> meminta seed phrase, private key, password, atau pairing code. Kalau ada yang memintanya, berhenti &mdash; itu penipuan.</p>
+    <p>Semua aksi di halaman ini memakai <b>BNB asli (Mainnet)</b> dan <b>tidak bisa dibatalkan</b>. Menyalakan mint berarti <b>siapa pun</b> yang memegang SPACE ID .ai Agent ID bisa mint &mdash; kontrak ini permissionless, tidak ada batas per wallet.</p>
+  </div>
+
+  <div class="dbox">
+    <h2>Kontrak (sudah dikunci)</h2>
+    <table class="dtable">
+      <tr><td>Kontrak</td><td>OOBIX (OOBX), ERC-721, Solidity 0.8.24</td></tr>
+      <tr><td>Alamat kontrak</td><td class="mono">0x666bf7475f5ba3b7b7294009ae55dd3e7407bf53</td></tr>
+      <tr><td>Deploy</td><td>2 Nov 2026, ~16:03 WIB &middot; blok 131213631 &middot; <a href="https://bscscan.com/address/0x666bf7475f5ba3b7b7294009ae55dd3e7407bf53" target="_blank" rel="noopener">BscScan</a> &middot; kontrak v3, lanjut dari #501 (v2: 0x2aE2969ae37CB39abc45375598cEE530C181838A, 500 mint, sekarang pause; v1: 0x607840e0a3675cf2181c98453484eb785ddd2d83, 19 mint)</td></tr>
+      <tr><td>Owner</td><td class="mono">0x0262e8e5E4584D8AB840fD950a6E2E0A414d4097 (My Wallet)</td></tr>
+      <tr><td>Revenue wallet</td><td class="mono">0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7 (Agentic Wallet)</td></tr>
+      <tr><td>Harga on-chain</td><td>Flat 0,0003 BNB untuk semua token #501&ndash;3333. Tidak ada tier, tidak ada price setter di kontrak v3 ini.</td></tr>
+      <tr><td>Mint</td><td>Agent-only: pemanggil harus memegang SPACE ID .ai Agent ID. Tanpa batas per wallet, 1 token per panggilan mint().</td></tr>
+      <tr><td>Pembayaran mint</td><td>BNB yang dibayar langsung diteruskan ke Agentic Wallet <b>di dalam</b> panggilan mint() &mdash; tidak masuk ke kontrak dulu. Saldo kontrak tetap 0 dalam operasi normal.</td></tr>
+      <tr><td>Audit</td><td>Tidak ada audit independen. Source v3 BELUM terverifikasi di BscScan (verifikasi tertunda), 9/9 Hardhat tests lolos &mdash; itu bukan audit.</td></tr>
+    </table>
+  </div>
+
+  <div class="dbox">
+    <h2>1 &mdash; Hubungkan wallet owner</h2>
+    <p id="walletStatus">Wallet belum terhubung.</p>
+    <button id="connectBtn" class="btn" type="button">Hubungkan Wallet</button>
+    <p id="netStatus" class="mut"></p>
+    <button id="switchBtn" class="btn hidden" type="button">Pindah ke BNB Smart Chain Mainnet (56)</button>
+  </div>
+
+  <div class="dbox">
+    <h2>2 &mdash; Periksa 3 hal ini &mdash; semua harus &#10003;</h2>
+    <p><span class="badge" id="badgeWallet">&hellip;</span><b>Wallet = My Wallet (owner)</b><br><span id="valWallet" class="mut">Belum terhubung.</span></p>
+    <p><span class="badge" id="badgeChain">&hellip;</span><b>Jaringan = BNB Smart Chain Mainnet (56)</b><br><span id="valChain" class="mut">Belum terhubung.</span></p>
+    <p><span class="badge" id="badgeOwner">&hellip;</span><b>Owner kontrak = My Wallet</b><br><span id="valOwner" class="mut">Belum terbaca.</span></p>
+  </div>
+
+  <div class="dbox">
+    <h2>Status kontrak (dibaca dari blockchain)</h2>
+    <p class="mut">Bisa dilihat tanpa menghubungkan wallet &mdash; dibaca lewat RPC publik.</p>
+    <p><span id="stActiveBig" class="bigstate off">MATI</span></p>
+    <table class="dtable">
+      <tr><td>Mint aktif?</td><td id="stActive">&mdash;</td></tr>
+      <tr><td>Total ter-mint</td><td id="stTotal">&mdash;</td></tr>
+      <tr><td>Harga mint saat ini</td><td id="stPrice">&mdash;</td></tr>
+      <tr><td>Base URI</td><td class="mono" id="stBaseUri">&mdash;</td></tr>
+      <tr><td>Revenue wallet</td><td class="mono" id="stRevenue">&mdash;</td></tr>
+      <tr><td>Owner (dari kontrak)</td><td class="mono" id="stOwner">&mdash;</td></tr>
+      <tr><td>Saldo kontrak (BNB)</td><td id="stBalance">&mdash;</td></tr>
+    </table>
+    <p><button id="refreshBtn" class="btn" type="button">Muat ulang status</button></p>
+    <p id="statusNote" class="mut"></p>
+  </div>
+
+  <div class="dbox">
+    <h2>3 &mdash; Nyalakan / matikan mint</h2>
+    <p class="mut">Biaya final ditampilkan wallet sebelum kamu menyetujui. Panggilan ini kecil (puluhan ribu gas). Perkiraan: <b id="estToggle">&mdash;</b>.</p>
+    <div class="check">
+      <input type="checkbox" id="confirmBox">
+      <label for="confirmBox">Saya paham: mint akan <b>dibuka untuk umum</b> (siapa pun yang memegang SPACE ID .ai Agent ID bisa mint, tanpa batas per wallet), harga #1&ndash;500 adalah 0,0003 BNB dan #501&ndash;3,333 adalah 0,0008 BNB, dan pembayaran mint langsung masuk ke Agentic Wallet. Tindakan ini memakai BNB asli dan tidak bisa dibatalkan.</label>
+    </div>
+    <div class="btnrow">
+      <button id="btnMintOn" class="btn primary" type="button" disabled>NYALAKAN MINT</button>
+      <button id="btnMintOff" class="btn" type="button" disabled>MATIKAN MINT</button>
+    </div>
+    <p id="toggleStatus" class="mut"></p>
+  </div>
+
+  <div class="dbox">
+    <h2>Withdraw ke Agentic Wallet</h2>
+    <p class="mut">Mengirim <b>seluruh saldo kontrak</b> ke revenue wallet (Agentic Wallet). Penting: pembayaran mint <b>tidak masuk ke kontrak</b> &mdash; uang mint langsung diteruskan ke Agentic Wallet di dalam mint(). Jadi dalam operasi normal saldo kontrak adalah 0, dan withdraw akan <b>gagal dengan NoFunds</b>. Itu <b>normal, bukan error halaman ini</b> &mdash; withdraw hanya memindahkan dana yang masuk ke kontrak dari luar mint().</p>
+    <div class="check">
+      <input type="checkbox" id="confirmWithdraw">
+      <label for="confirmWithdraw">Saya paham withdraw mengirim seluruh saldo kontrak ke Agentic Wallet <span class="mono">0x89c3&hellip;47B7</span>, dan kalau saldonya 0 transaksi akan gagal (NoFunds) &mdash; itu normal.</label>
+    </div>
+    <button id="btnWithdraw" class="btn" type="button" disabled>Withdraw ke Agentic Wallet</button>
+    <p class="mut">Perkiraan biaya: <b id="estWithdraw">&mdash;</b>.</p>
+  </div>
+
+  <p id="status" role="status"></p>
+  <p id="error" role="alert" class="bad"></p>
+
+  <div class="dbox hidden" id="resultBox">
+    <h2>&#10003; Transaksi berhasil!</h2>
+    <table class="dtable">
+      <tr><td>Aksi</td><td id="resAction">&mdash;</td></tr>
+      <tr><td>Hash transaksi</td><td class="mono" id="resTx">&mdash;</td></tr>
+      <tr><td>Status mint sekarang</td><td id="resDetail">&mdash;</td></tr>
+    </table>
+    <p style="margin-top:12px"><a id="resExplorer" target="_blank" rel="noopener">Lihat di BscScan &rarr;</a></p>
+    <button id="btnCopy" class="btn" type="button">Salin hash transaksi</button>
+  </div>
+
+  <div class="dbox">
+    <h2>Yang TIDAK perlu dilakukan</h2>
+    <ul class="mut">
+      <li>Tidak perlu Remix.</li>
+      <li>Tidak perlu scan QR / WalletConnect.</li>
+      <li>Tidak perlu agen AI yang dipasangkan.</li>
+      <li>Tidak perlu mengisi gas manual &mdash; halaman memakai harga gas jaringan saat ini.</li>
+    </ul>
+    <p class="small mut">Kontrak ini belum diaudit secara independen. Aksi owner memakai BNB sungguhan dan tidak bisa dibatalkan.</p>
+  </div>
+</main>
+
+<footer style="border-top:3px solid var(--ink);padding:24px;text-align:center" class="small muted">
+  OOBIX &mdash; Weird Little Universe. Kontrak v3 ter-deploy 2 Nov 2026. Tidak ada audit independen.
+</footer>
+
+<script src="ethers.umd.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var CONTRACT = '0x666bf7475f5ba3b7b7294009ae55dd3e7407bf53';
+  var OWNER = '0x0262e8e5E4584D8AB840fD950a6E2E0A414d4097';
+  var REVENUE = '0x89c37649Ba3BAA9E1ce028612b7DE4e9c3a947B7';
+  var CHAIN_ID = 56, CHAIN_HEX = '0x38';
+  var RPC_URLS = ['https://bsc-dataseed.binance.org/', 'https://bsc.publicnode.com'];
+  // Minimal ABI — 9 fungsi, sama persis dengan kontrak ter-deploy
+  // (diverifikasi terhadap artifact compile sebelum halaman diterbitkan).
+  var ABI = [
+    'function owner() view returns (address)',
+    'function mintActive() view returns (bool)',
+    'function totalSupply() view returns (uint256)',
+    'function currentPrice() view returns (uint256)',
+    'function baseURI() view returns (string)',
+    'function revenueWallet() view returns (address)',
+    'function agentIdRegistry() view returns (address)',
+    'function setMintActive(bool active)',
+    'function withdraw()'
+  ];
+  var state = { provider: null, signer: null, account: '', chainOk: false, walletOk: false, ownerOk: false, status: null, busy: false };
+
+  function $(id) { return document.getElementById(id); }
+  function setBadge(id, ok) { var b = $(id); b.textContent = ok ? '\u2713' : '\u2715'; b.className = 'badge ' + (ok ? 'ok' : 'bad'); }
+  function showError(msg) { $('error').textContent = msg || ''; }
+  function showStatus(msg) { $('status').textContent = msg || ''; }
+  function setText(id, msg, cls) { var el = $(id); el.textContent = msg; if (cls) el.className = cls; }
+
+  // Harga gas: JANGAN pakai provider.getFeeData() sendirian. Provider di
+  // browser dalam aplikasi wallet (mis. Binance) mengembalikan null untuk
+  // feeHistory/maxPriorityFee, sehingga getFeeData melempar SEBELUM
+  // transaksi apa pun dikirim (ini yang dulu merusak halaman deploy).
+  // eth_gasPrice bekerja di BSC dan menjadi sumber yang andal di sini.
+  async function getGasPriceWei() {
+    try {
+      var fee = await state.provider.getFeeData();
+      if (fee && fee.gasPrice) return fee.gasPrice;
+    } catch (e) { /* fall through to eth_gasPrice */ }
+    var gp = await state.provider.send('eth_gasPrice', []);
+    if (gp == null) throw new Error('Harga gas tidak didapat dari wallet (eth_gasPrice kosong).');
+    return gp;
+  }
+
+  var GAS_FALLBACKS = { setMintActive: 60000n, withdraw: 100000n };
+  async function estimateGas(contract, fn, args) {
+    try {
+      var est = await contract[fn].estimateGas.apply(null, args);
+      return (est * 120n) / 100n;
+    } catch (e) {
+      return GAS_FALLBACKS[fn];
+    }
+  }
+  async function estimateCost(fn, args) {
+    try {
+      var price = await getGasPriceWei();
+      var contract = new window.ethers.Contract(CONTRACT, ABI, state.provider);
+      var gas = await estimateGas(contract, fn, args);
+      return '\u00B1 ' + window.ethers.formatEther(gas * price) + ' BNB (' + gas.toString() + ' gas, ' + (Number(price) / 1e9).toFixed(2) + ' gwei)';
+    } catch (e) { return '\u2014'; }
+  }
+
+  // Provider baca-saja (RPC publik) — status bisa dilihat tanpa wallet.
+  var readProvider = null;
+  async function getReadProvider() {
+    if (readProvider) return readProvider;
+    for (var i = 0; i < RPC_URLS.length; i++) {
+      try {
+        var p = new window.ethers.JsonRpcProvider(RPC_URLS[i]);
+        await p.getBlockNumber();
+        readProvider = p;
+        return p;
+      } catch (e) { /* coba RPC berikutnya */ }
+    }
+    throw new Error('RPC publik tidak bisa dihubungi. Periksa koneksi lalu muat ulang halaman.');
+  }
+
+  function readContract(provider) {
+    return new window.ethers.Contract(CONTRACT, ABI, provider);
+  }
+
+  async function readStatus() {
+    if (!window.ethers) throw new Error('Ethers belum termuat. Periksa koneksi lalu muat ulang halaman.');
+    var provider = state.provider || await getReadProvider();
+    var c = readContract(provider);
+    var results = await Promise.all([
+      c.owner(), c.mintActive(), c.totalSupply(), c.currentPrice(),
+      c.baseURI(), c.revenueWallet(), provider.getBalance(CONTRACT)
+    ]);
+    state.status = {
+      owner: results[0], active: results[1], total: results[2], price: results[3],
+      baseURI: results[4], revenue: results[5], balance: results[6]
+    };
+    var big = $('stActiveBig');
+    big.textContent = results[1] ? 'AKTIF' : 'MATI';
+    big.className = 'bigstate ' + (results[1] ? 'on' : 'off');
+    setText('stActive', results[1] ? 'AKTIF \u2014 mint terbuka' : 'MATI \u2014 mint belum dibuka', results[1] ? 'ok' : 'bad');
+    setText('stTotal', results[2].toString() + ' / 3.333');
+    setText('stPrice', window.ethers.formatEther(results[3]) + ' BNB');
+    setText('stBaseUri', results[4]);
+    setText('stRevenue', results[5]);
+    setText('stOwner', results[0]);
+    setText('stBalance', window.ethers.formatEther(results[6]) + ' BNB' + (results[6] === 0n ? ' (normal \u2014 pembayaran mint langsung ke Agentic Wallet)' : ''));
+    state.ownerOk = String(results[0]).toLowerCase() === OWNER.toLowerCase();
+    setBadge('badgeOwner', state.ownerOk);
+    setText('valOwner', state.ownerOk ? 'Owner kontrak = My Wallet \u2713' : 'Owner kontrak BUKAN My Wallet: ' + results[0], state.ownerOk ? 'ok' : 'bad');
+    setText('statusNote', 'Status dibaca dari BNB Smart Chain Mainnet (blok terbaru) dan dimuat ulang otomatis setelah setiap transaksi berhasil.');
+    refreshButtons();
+    return state.status;
+  }
+
+  function refreshButtons() {
+    var guards = state.walletOk && state.chainOk && state.ownerOk && !state.busy;
+    var confirmed = $('confirmBox').checked;
+    var active = state.status ? state.status.active : false;
+    $('btnMintOn').disabled = !(guards && confirmed && !active);
+    $('btnMintOff').disabled = !(guards && confirmed && active);
+    $('btnWithdraw').disabled = !(guards && $('confirmWithdraw').checked);
+  }
+
+  async function refreshChecks() {
+    try {
+      var net = await state.provider.getNetwork();
+      state.chainOk = Number(net.chainId) === CHAIN_ID;
+      state.walletOk = String(state.account).toLowerCase() === OWNER.toLowerCase();
+      setBadge('badgeWallet', state.walletOk);
+      setText('valWallet', state.walletOk ? 'My Wallet \u2713' : 'Wallet terhubung BUKAN My Wallet: ' + state.account, state.walletOk ? 'ok' : 'bad');
+      setBadge('badgeChain', state.chainOk);
+      setText('valChain', state.chainOk ? 'BNB Smart Chain Mainnet (56) \u2713' : 'Jaringan salah: Chain ID ' + net.chainId + ' (harus 56).', state.chainOk ? 'ok' : 'bad');
+      $('switchBtn').classList.toggle('hidden', state.chainOk);
+      refreshButtons();
+    } catch (e) {
+      showError('Gagal memeriksa wallet/jaringan: ' + (e && e.message || e));
+    }
+  }
+
+  async function connect() {
+    showError(''); showStatus('');
+    if (!window.ethers) { showError('Ethers belum termuat. Periksa koneksi lalu muat ulang halaman.'); return; }
+    var eth = window.ethereum;
+    if (!eth) { showError('Wallet tidak ditemukan. Buka halaman ini di browser dalam aplikasi wallet Anda.'); return; }
+    try {
+      var accounts = await eth.request({ method: 'eth_requestAccounts' });
+      state.provider = new window.ethers.BrowserProvider(eth);
+      state.signer = await state.provider.getSigner();
+      state.account = String((accounts && accounts[0]) || await state.signer.getAddress());
+      await refreshChecks();
+      await readStatus();
+      setText('walletStatus', 'Terhubung: ' + state.account, state.walletOk ? 'ok' : 'bad');
+      setText('netStatus', state.chainOk ? 'Jaringan: BNB Smart Chain Mainnet (56). Benar.' : 'Jaringan salah \u2014 pindah ke BNB Smart Chain Mainnet (56) dulu.', state.chainOk ? 'ok' : 'bad');
+      $('estToggle').textContent = await estimateCost('setMintActive', [true]);
+      $('estWithdraw').textContent = await estimateCost('withdraw', []);
+    } catch (e) {
+      showError('Gagal menghubungkan wallet: ' + (e && e.message || e));
+    }
+  }
+
+  async function sendOwnerTx(fn, args, label) {
+    if (state.busy) return;
+    showError(''); showStatus('Menunggu persetujuan di wallet\u2026');
+    state.busy = true; refreshButtons();
+    try {
+      if (!state.walletOk || !state.chainOk || !state.ownerOk) throw new Error('Pemeriksaan wallet/jaringan/owner belum lolos. Jangan kirim transaksi.');
+      var contract = new window.ethers.Contract(CONTRACT, ABI, state.signer);
+      // Override gas eksplisit: ethers tidak boleh memanggil getFeeData()
+      // saat menyiapkan transaksi (lihat getGasPriceWei di atas).
+      var gasPrice = await getGasPriceWei();
+      var gasLimit = await estimateGas(contract, fn, args);
+      var tx = await contract[fn].apply(null, args.concat([{ gasPrice: gasPrice, gasLimit: gasLimit }]));
+      showStatus('Transaksi terkirim: ' + tx.hash + '. Menunggu konfirmasi\u2026');
+      var receipt = await tx.wait();
+      if (!receipt || receipt.status !== 1) throw new Error('Transaksi gagal di blockchain (status bukan 1).');
+      var st = await readStatus();
+      var detail = 'Mint ' + (st.active ? 'AKTIF' : 'MATI') + ' \u00B7 Total ' + st.total.toString() + '/3.333 \u00B7 Saldo kontrak ' + window.ethers.formatEther(st.balance) + ' BNB';
+      $('resAction').textContent = label;
+      $('resTx').textContent = tx.hash;
+      $('resDetail').textContent = detail;
+      $('resExplorer').href = 'https://bscscan.com/tx/' + tx.hash;
+      $('resultBox').classList.remove('hidden');
+      showStatus('Berhasil: ' + label + ' (hash ' + tx.hash + ').');
+    } catch (e) {
+      var msg = (e && e.code === 'ACTION_REJECTED') ? 'Transaksi ditolak di wallet. Tidak ada perubahan di kontrak.' : 'Gagal: ' + (e && e.message || e) + ' Kalau transaksi sudah terkirim, cek hash-nya di BscScan sebelum mencoba ulang.';
+      showError(msg);
+    } finally {
+      state.busy = false; refreshButtons();
+    }
+  }
+
+  $('connectBtn').addEventListener('click', connect);
+  $('refreshBtn').addEventListener('click', async function () { try { await readStatus(); } catch (e) { showError(e.message || String(e)); } });
+  $('switchBtn').addEventListener('click', async function () {
+    try {
+      await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: CHAIN_HEX }] });
+      await refreshChecks(); await readStatus();
+    } catch (e) { showError('Gagal pindah jaringan: ' + (e && e.message || e)); }
+  });
+  $('confirmBox').addEventListener('change', refreshButtons);
+  $('confirmWithdraw').addEventListener('change', refreshButtons);
+  $('btnMintOn').addEventListener('click', function () { sendOwnerTx('setMintActive', [true], 'Mint dinyalakan'); });
+  $('btnMintOff').addEventListener('click', function () { sendOwnerTx('setMintActive', [false], 'Mint dimatikan'); });
+  $('btnWithdraw').addEventListener('click', function () { sendOwnerTx('withdraw', [], 'Withdraw ke Agentic Wallet'); });
+  $('btnCopy').addEventListener('click', async function () {
+    try { await navigator.clipboard.writeText($('resTx').textContent); showStatus('Hash transaksi disalin.'); }
+    catch (e) { showError('Gagal menyalin. Salin manual dari teks di atas.'); }
+  });
+
+  if (window.ethereum && window.ethereum.on) {
+    window.ethereum.on('accountsChanged', function () { location.reload(); });
+    window.ethereum.on('chainChanged', function () { location.reload(); });
+  }
+
+  // Status langsung dimuat saat halaman dibuka — tanpa wallet.
+  readStatus().catch(function (e) { setText('statusNote', 'Status kontrak belum bisa dibaca: ' + (e && e.message ? e.message : e), 'bad'); });
+})();
+</script>
+</body>
+</html>
