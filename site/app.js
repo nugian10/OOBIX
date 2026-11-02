@@ -324,7 +324,7 @@
       "Mint one OOBIX on BNB Smart Chain (chain id 56).\n" +
       addrLine + " " + promptStateText() + "\n" +
       "First check that my wallet holds a SPACE ID .ai Agent ID: call hasAgentId(my wallet address) on the OOBIX contract — it must return true, otherwise the mint will revert. The Agent ID registry is 0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F. There is no per-wallet mint limit.\n" +
-      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Live pricing: tokens #1-500 cost 0.0003 BNB each, tokens #501-3333 cost 0.0008 BNB each. One token per mint() call. The payment goes directly to the revenue wallet in the same call; it never sits in the contract.\n" +
+      "Then read currentPrice() on the contract and call mint() with no arguments, sending exactly that value. Flat pricing on v3: every token #501-3333 costs 0.0003 BNB each. One token per mint() call. The payment goes directly to the revenue wallet in the same call; it never sits in the contract.\n" +
       "Show me the exact amount before I sign, and confirm the transaction on-chain once it is done: https://bscscan.com/address/" + addr;
   }
   function initMint() {
@@ -366,10 +366,10 @@
   const RPC_URLS = ["https://bsc-dataseed.binance.org/", "https://bsc.publicnode.com"];
   let liveTotal = null;
   let liveActive = null;
-  async function rpcCall(data) {
+  async function rpcCall(data, to) {
     for (const url of RPC_URLS) {
       try {
-        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: CFG.CONTRACT_ADDRESS, data: data }, "latest"] }) });
+        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to || CFG.CONTRACT_ADDRESS, data: data }, "latest"] }) });
         const json = await res.json();
         if (json && json.result) return json.result;
       } catch (e) { /* try next RPC */ }
@@ -378,15 +378,24 @@
   }
   async function refreshLiveMint() {
     if (!CFG.CONTRACT_ADDRESS) return;
-    const totalHex = await rpcCall("0x18160ddd"); // totalSupply()
+    const totalHex = await rpcCall("0x18160ddd"); // totalSupply() on v3 (v3 tokens only)
     if (totalHex == null) return;
-    liveTotal = parseInt(totalHex, 16);
+    // Cumulative display: v2 minted 500 (#1-500, now paused) + v3 minted so far.
+    // v3 totalSupply() counts v3 tokens only, so adding v2 live count (or the
+    // known 500 fallback) is required — otherwise the site would show 0/500.
+    let v2Total = CFG.V2_MINTED || 0;
+    if (CFG.V2_CONTRACT_ADDRESS) {
+      const v2Hex = await rpcCall("0x18160ddd", CFG.V2_CONTRACT_ADDRESS);
+      if (v2Hex != null) v2Total = parseInt(v2Hex, 16);
+    }
+    liveTotal = v2Total + parseInt(totalHex, 16);
     const activeHex = await rpcCall("0x25fd90f3"); // mintActive()
     liveActive = activeHex != null ? parseInt(activeHex, 16) === 1 : true;
     buildPrompt(); // refresh the prompt's mint-state line with the live state
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
     set("mint-total", String(liveTotal));
     set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));
+    set("mint-price", CFG.MINT_PRICE || "0.0003 BNB");
     const host = $("#stats");
     if (host) {
       const el = host.querySelector('[data-stat="supply"]');

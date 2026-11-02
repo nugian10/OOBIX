@@ -34,12 +34,13 @@
 
   <section class="section wrap">
     <h2>Mint Information</h2>
-    <p class="muted" style="max-width:680px;margin-top:12px;">The v2 contract is
-    deployed (30 Oct 2026 ~22:27 WIB). Mint is <strong>LIVE</strong>
-    since 30 Oct 2026 ~22:39 WIB. Numbers below are live
-    from the v2 contract — total minted updates from the chain.</p>
+    <p class="muted" style="max-width:680px;margin-top:12px;">The v3 contract
+    continues the same collection from token #501. The v2 contract is paused
+    (500 minted, #1–#500). Numbers below are live from the chain — total minted
+    is cumulative (v2 + v3) and updates from the chain.</p>
     <table class="price-table">
       <tr><th>Total supply</th><td>3,333</td></tr>
+      <tr><th>Current price</th><td id="mint-price">0.0003 BNB — flat for every token #501–#3333</td></tr>
       <tr><th>Total minted</th><td id="mint-total">0 — live count loads from the chain</td></tr>
       <tr><th>Remaining supply</th><td id="mint-remaining">3,333</td></tr>
       <tr><th>Per-wallet limit</th><td>No limit — one wallet can mint as many times as it wants. Each mint transaction gives 1 token, so 10 tokens = 10 transactions.</td></tr>
@@ -86,10 +87,11 @@
       <div class="step">
         <div class="n">05</div>
         <div>
-          <h3>On-chain confirmation — and the reveal</h3>
+          <h3>On-chain confirmation — pre-shuffled deck</h3>
           <p>Once the transaction confirms on BNB Smart Chain, the alien is
-          yours. Each mint opens the next slot of the gacha deck, so its
-          rarity is revealed the moment the mint confirms.</p>
+          yours. Each mint takes the next slot of the pre-shuffled deck, so its
+          artwork and rarity are already fixed in the deck — there is no delayed
+          reveal.</p>
         </div>
       </div>
     </div>
@@ -106,9 +108,10 @@
     </div>
     <p class="small muted">Contract address: <span class="mono js-contract-address">0x2aE2969ae37CB39abc45375598cEE530C181838A</span></p>
     <div class="note" style="margin-top:28px;">
-      <p><strong>Honest note.</strong> The v2 contract is deployed at 0x2aE2969ae37CB39abc45375598cEE530C181838A — minting is live since 30 Oct 2026 ~22:39 WIB. The v1 collection
+      <p><strong>Honest note.</strong> The v3 contract is deployed at 0x666bf7475f5ba3b7b7294009ae55dd3e7407bf53 and continues from token #501 at a flat 0.0003 BNB. The v2 contract
+      0x2aE2969ae37CB39abc45375598cEE530C181838A is paused (500 minted, #1–#500). The v1 collection
       (19 minted) lives on the previous contract 0x607840e0a3675cf2181c98453484eb785ddd2d83.
-      Minting is live for any wallet holding a SPACE ID Agent ID. Payment goes
+      Minting is for any wallet holding a SPACE ID Agent ID, once the owner activates mint on v3. Payment goes
       directly to the revenue wallet inside the mint call; it never sits in the
       contract. No independent audit.</p>
     </div>
