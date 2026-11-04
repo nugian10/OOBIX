@@ -3,8 +3,9 @@
    artwork is hard-coded here beyond the known collection size (3,333)
    and the five rarities. If the collection files are not there yet,
    the site shows honest "not yet published" states.
-   The v2 contract IS deployed (0x2aE2969ae37CB39abc45375598cEE530C181838A)
-   and mint is LIVE since 30 Oct 2026 ~22:39 WIB.
+   The v3 contract IS deployed (0x666bf7475f5ba3b7b7294009ae55dd3e7407bf53),
+   flat 0.0003 BNB, mint LIVE since 2 Nov 2026. v2
+   (0x2aE2969ae37CB39abc45375598cEE530C181838A) is paused at 500 mints.
    Minted counts are read live from the chain (refreshLiveMint);
    static numbers are fallbacks only. v1 (0x607840e0a3675cf2181c98453484eb785ddd2d83)
    had 19 mints and stays live on-chain. */
@@ -31,9 +32,12 @@
   });
 
   /* ---------- contract status line ---------- */
+  // Pending state is neutral on purpose: it must NOT read as "mint is
+  // closed". It only becomes MINT IS LIVE / MINT NOT ACTIVE after a
+  // successful chain read (see refreshLiveMint).
   $$(".js-contract-status").forEach((el) => {
     if (CFG.CONTRACT_ADDRESS) {
-      el.innerHTML = '<span class="dot"></span><span>CONTRACT DEPLOYED — ' + esc(CFG.CONTRACT_ADDRESS) + "</span>";
+      el.innerHTML = '<span class="dot"></span><span>CHECKING MINT STATUS… — ' + esc(CFG.CONTRACT_ADDRESS) + "</span>";
     } else {
       el.innerHTML = '<span class="dot"></span><span>CONTRACT NOT DEPLOYED YET — MINTING OPENS AFTER DEPLOY</span>';
     }
@@ -109,7 +113,10 @@
     set("total", Number(total).toLocaleString("en-US"));
     set("species", species > 0 ? String(species) : String(CFG.SPECIES.length));
     set("published", known > 0 ? Number(known).toLocaleString("en-US") : "—");
-    set("supply", "0");
+    // Known floor, not 0: v2 already minted 500 (#1-500, now paused).
+    // refreshLiveMint overwrites this with the live cumulative total
+    // when the chain read succeeds.
+    set("supply", String(CFG.V2_MINTED || 0));
     const note = $("#stats-note");
     if (note) {
       note.textContent = known === 0
@@ -309,7 +316,7 @@
   // again from refreshLiveMint() once mintActive() has been read, so the
   // prompt never claims LIVE while the contract says closed.
   function promptStateText() {
-    if (liveActive === null) return "Mint status is read live from the contract — check the status banner on this page before minting.";
+    if (liveActive === null) return "Mint status could not be read from this page — read mintActive() on the contract yourself to confirm minting is open before minting.";
     if (liveActive) return "Mint is LIVE.";
     return "Mint is NOT active yet — do not mint until the owner activates it.";
   }
@@ -363,13 +370,32 @@
   // Reads totalSupply() + mintActive() straight from the chain with a plain
   // JSON-RPC call (no wallet, no library). Falls back silently to the static
   // numbers in the HTML when the RPC is unreachable.
-  const RPC_URLS = ["https://bsc-dataseed.binance.org/", "https://bsc.publicnode.com"];
+  // Public BSC endpoints rate-limit and 403/429 regularly, so keep several
+  // and try each with a short timeout — one dead endpoint must never make
+  // the whole site look closed. (Nov 2026: bsc-dataseed.binance.org and
+  // bsc.publicnode.com both failed while dataseed2/dataseed4 answered.)
+  const RPC_URLS = [
+    "https://bsc-dataseed2.binance.org/",
+    "https://bsc-dataseed4.binance.org/",
+    "https://bsc-dataseed1.binance.org/",
+    "https://bsc-dataseed.binance.org/",
+    "https://bsc.publicnode.com",
+  ];
+  const RPC_TIMEOUT_MS = 8000;
   let liveTotal = null;
   let liveActive = null;
   async function rpcCall(data, to) {
     for (const url of RPC_URLS) {
       try {
-        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to || CFG.CONTRACT_ADDRESS, data: data }, "latest"] }) });
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), RPC_TIMEOUT_MS);
+        let res;
+        try {
+          res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: to || CFG.CONTRACT_ADDRESS, data: data }, "latest"] }), signal: ctrl.signal });
+        } finally {
+          clearTimeout(timer);
+        }
+        if (!res || !res.ok) continue;
         const json = await res.json();
         if (json && json.result) return json.result;
       } catch (e) { /* try next RPC */ }
@@ -378,33 +404,47 @@
   }
   async function refreshLiveMint() {
     if (!CFG.CONTRACT_ADDRESS) return;
+    // Read the count and the mint state independently: a failed count read
+    // must NOT hide a successful mintActive read (and vice versa). Before
+    // this fix the function returned early when totalSupply failed, so the
+    // pill stayed on "CONTRACT DEPLOYED" and the prompt never said LIVE —
+    // and no agent minted. (Nov 2026.)
     const totalHex = await rpcCall("0x18160ddd"); // totalSupply() on v3 (v3 tokens only)
-    if (totalHex == null) return;
-    // Cumulative display: v2 minted 500 (#1-500, now paused) + v3 minted so far.
-    // v3 totalSupply() counts v3 tokens only, so adding v2 live count (or the
-    // known 500 fallback) is required — otherwise the site would show 0/500.
-    let v2Total = CFG.V2_MINTED || 0;
-    if (CFG.V2_CONTRACT_ADDRESS) {
-      const v2Hex = await rpcCall("0x18160ddd", CFG.V2_CONTRACT_ADDRESS);
-      if (v2Hex != null) v2Total = parseInt(v2Hex, 16);
-    }
-    liveTotal = v2Total + parseInt(totalHex, 16);
     const activeHex = await rpcCall("0x25fd90f3"); // mintActive()
-    liveActive = activeHex != null ? parseInt(activeHex, 16) === 1 : true;
-    buildPrompt(); // refresh the prompt's mint-state line with the live state
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
-    set("mint-total", String(liveTotal));
-    set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));
-    set("mint-price", CFG.MINT_PRICE || "0.0003 BNB");
-    const host = $("#stats");
-    if (host) {
-      const el = host.querySelector('[data-stat="supply"]');
-      if (el) el.textContent = String(liveTotal);
+    if (totalHex != null) {
+      // Cumulative display: v2 minted 500 (#1-500, now paused) + v3 minted so far.
+      // v3 totalSupply() counts v3 tokens only, so adding v2 live count (or the
+      // known 500 fallback) is required — otherwise the site would show 0/500.
+      let v2Total = CFG.V2_MINTED || 0;
+      if (CFG.V2_CONTRACT_ADDRESS) {
+        const v2Hex = await rpcCall("0x18160ddd", CFG.V2_CONTRACT_ADDRESS);
+        if (v2Hex != null) v2Total = parseInt(v2Hex, 16);
+      }
+      liveTotal = v2Total + parseInt(totalHex, 16);
+      set("mint-total", String(liveTotal));
+      set("mint-remaining", String(CFG.TOTAL_SUPPLY - liveTotal));
+      const host = $("#stats");
+      if (host) {
+        const el = host.querySelector('[data-stat="supply"]');
+        if (el) el.textContent = String(liveTotal);
+      }
     }
+    if (activeHex != null) liveActive = parseInt(activeHex, 16) === 1;
+    buildPrompt(); // refresh the prompt's mint-state line with the live state
+    set("mint-price", CFG.MINT_PRICE || "0.0003 BNB");
     const note = $("#stats-note");
-    if (note) note.textContent = liveActive ? "Mint is LIVE. " + liveTotal + " minted on-chain so far." : "Mint is not active. " + liveTotal + " minted on-chain so far.";
+    if (note) {
+      const base = liveTotal != null ? liveTotal + " minted on-chain so far." : "Minted count could not be read from the chain.";
+      note.textContent = liveActive === true ? "Mint is LIVE. " + base : liveActive === false ? "Mint is not active. " + base : "Mint status could not be read — check mintActive() on the contract. " + base;
+    }
+    const pillText = liveActive === true
+      ? "MINT IS LIVE — " + liveTotal + " MINTED SO FAR"
+      : liveActive === false
+        ? "MINT NOT ACTIVE"
+        : "MINT STATUS UNAVAILABLE — CHECK ON-CHAIN";
     $$(".js-contract-status").forEach((el) => {
-      el.innerHTML = '<span class="dot"></span><span>' + (liveActive ? "MINT IS LIVE — " + liveTotal + " MINTED SO FAR" : "CONTRACT DEPLOYED — MINT NOT ACTIVE") + " — " + esc(CFG.CONTRACT_ADDRESS) + "</span>";
+      el.innerHTML = '<span class="dot"></span><span>' + pillText + " — " + esc(CFG.CONTRACT_ADDRESS) + "</span>";
     });
   }
 
