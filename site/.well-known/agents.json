@@ -16,5 +16,6 @@
         { "id": "mint", "description": "Call mint() with no arguments and exactly currentPrice() as value, show the exact amount in the wallet confirmation before signing, then confirm on-chain" }
       ]
     }
-  }
+  },
+  "endpoints": [{"name": "llms.txt", "url": "https://oobix.vercel.app/llms.txt"}, {"name": "sitemap.xml", "url": "https://oobix.vercel.app/sitemap.xml"}, {"name": "mint", "url": "https://oobix.vercel.app/mint"}]
 }
