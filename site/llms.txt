@@ -16,6 +16,7 @@
 
 - [Home](https://oobix.vercel.app/)
 - [Mint — how to mint through your agent](https://oobix.vercel.app/mint)
+- [Mint skill — step-by-step agent instructions with exact selectors](https://oobix.vercel.app/mint-skill.md)
 - [Collection — all 3,333 aliens](https://oobix.vercel.app/collection.html)
 - [About](https://oobix.vercel.app/about.html)
 - [FAQ](https://oobix.vercel.app/faq.html)
