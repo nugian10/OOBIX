@@ -462,3 +462,31 @@ footer.site {
   letter-spacing: 0.1em;
   line-height: 2;
 }
+
+/* ---- mobile-first fixes (4 Nov 2026) ----
+   The status pill carries the full 42-char contract address: on a
+   360px phone the flex item could not shrink, so the pill overflowed
+   and got clipped by overflow-x:hidden. Let it wrap and break. */
+.status { flex-wrap: wrap; }
+.status > span:last-child { min-width: 0; overflow-wrap: anywhere; word-break: break-all; }
+
+@media (max-width: 560px) {
+  .wrap, .nav { padding-left: 16px; padding-right: 16px; }
+  .nav { min-height: 56px; gap: 8px; }
+  /* one scrollable link row instead of 2-3 wrapped rows; 44px taps */
+  .nav-links { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; max-width: 100%; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a { padding: 12px 10px; white-space: nowrap; }
+  .brand { font-size: 20px; }
+  .hero { padding-top: 40px; }
+  .step { grid-template-columns: 48px 1fr; gap: 12px; padding: 20px 0; }
+  .stat { padding: 16px 14px; }
+  /* stack the mint-info table: label above value, no squeeze */
+  .price-table, .price-table tr, .price-table th, .price-table td { display: block; width: 100%; }
+  .price-table th { background: transparent; color: var(--grey); padding: 12px 14px 0; border-bottom: 0; }
+  .price-table td { padding: 2px 14px 14px; }
+  .price-table tr { border-bottom: 2px solid #e5dcc2; }
+  .price-table tr:last-child { border-bottom: 0; }
+  .filters select, .filters input[type="search"] { padding: 12px 16px; }
+  .prompt-box { padding: 18px; }
+}
